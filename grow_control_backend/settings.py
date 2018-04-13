@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
+from datetime import datetime, timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +25,7 @@ SECRET_KEY = 'dre1z5o6f6icvacg=&rptrzjrtcecyi_#g+ul_vc@!@mym4oxl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'grow_control_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'growcontrol',
+        'USER': 'grow',
+        'PASSWORD': 'grow1234',
+        'HOST': '192.168.1.59',
+        'PORT': '5432',
     }
 }
 
@@ -119,3 +124,40 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    #'PAGE_SIZE': 10,
+    #'PAGINATE_BY_PARAM': 'page_size',
+    'DEFAULT_PAGINATION_CLASS': 'src.pagination.RestPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
+# Permitir refrescar los tokens
+JWT_AUTH = {
+
+    # Tiempo de expiracion del token [5mins]
+
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=90000000),
+
+    # Permitir refrescar el token (refresca la fecha de espiracion) [false]
+    'JWT_ALLOW_REFRESH': True,
+
+    'JWT_VERIFY_EXPIRATION': False,
+    # Fecha hasta la cual puede refrescar los tokens [7dias]
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
+
+}
