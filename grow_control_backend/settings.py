@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'src.middleware.GlobalCurrentRequestMiddleware',   
 ]
 
 ROOT_URLCONF = 'grow_control_backend.urls'
