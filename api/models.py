@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from src.model import BaseModel
 
-# Create your models here.
 GENDER_TYPE = (
     ('Masculino', 'Masculino'),
     ('Femenino', 'Femenino'),
@@ -108,5 +109,3 @@ class ChildsDetail(BaseModel):
     height = models.FloatField('Altura')
     weight = models.FloatField('Peso')
     type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
-
-
