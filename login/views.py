@@ -59,10 +59,10 @@ class LoginView(APIView):
 
             payload = jwt_payload_handler(user)
             token = jwt_encode_handler(payload)
-
-            return Response({'token': token, 'full_name': user.first_name + ' ' + user.last_name , 'is_superuser': user.is_superuser}, status=status.HTTP_202_ACCEPTED)
-        except Token.DoesNotExist:
-            return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
+            full_name = user.first_name + ' ' + user.last_name if user.first_name and user.last_name else ''
+            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser}, status=status.HTTP_202_ACCEPTED)
+        # except Token.DoesNotExist:
+        #     return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({'detail': ['Actualmente no se puede ingresar a la aplicación, por favor intente más tarde']}, status=status.HTTP_404_NOT_FOUND)
 
