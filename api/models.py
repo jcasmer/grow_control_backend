@@ -3,7 +3,6 @@
 from django.db import models
 from src.model import BaseModel
 
-
 GENDER_TYPE = (
     ('Masculino', 'Masculino'),
     ('Femenino', 'Femenino'),
