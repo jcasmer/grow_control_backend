@@ -10,15 +10,15 @@ class TypeDiagnosticSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = TypeDiagnostic
-        fields = ('url', 'id', 'name', 'is_active')        
+        fields = ('url', 'id', 'name')        
        
         
 
-class TypeDiagnosticDataSerializer(serializers.ModelSerializer):
+class TypeDiagnosticFullDataSerializer(serializers.ModelSerializer):
     
     created_by = UserSerializer()
     updated_by = UserSerializer()
 
     class Meta:
         model = TypeDiagnostic
-        fields = ('url', 'id','name', 'is_active', 'created_at', 'created_by', 'updated_at', 'updated_by')
+        fields = ('url', 'id','name', 'created_at', 'created_by', 'updated_at', 'updated_by')

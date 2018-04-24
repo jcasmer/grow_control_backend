@@ -1,0 +1,1 @@
+from .type_diagnostic import TypeDiagnosticViewSet, TypeDiagnosticFullDataViewSet
