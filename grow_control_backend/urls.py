@@ -28,5 +28,6 @@ router.register(r'type-diagnostic-full-data', application_views.type_diagnostic.
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/login/', include('login.urls')) ,
     path('api/', include(router.urls)),
 ]
