@@ -33,17 +33,13 @@ class LoginView(APIView):
 
         username = request.data.get('username')
         password = request.data.get('password')
-        user_data = {
-            'user': username,
-            'password': password
-        }
 
-        if username == '' or username is None:
+        if not username :
             errors['username'] = ['El campo usuario es obligatorio.']
-        if password == '' or password is None:
+        if not password:
             errors['password'] = ['El campo contraseña es obligatorio.']
 
-        if len(errors) > 0:
+        if errors:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -52,15 +48,16 @@ class LoginView(APIView):
             return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
         
         try:
-            user = authenticate(username=username, password=password)
-            login(request, user)
+            user_authenticated = authenticate(username=username, password=password)
+            if user_authenticated and user.is_active:
+                login(request, user)
             jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
             jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
             payload = jwt_payload_handler(user)
             token = jwt_encode_handler(payload)
-
-            return Response({'token': token, 'full_name': user.first_name + ' ' + user.last_name , 'is_superuser': user.is_superuser}, status=status.HTTP_202_ACCEPTED)
+            full_name = user.first_name + ' ' + user.last_name if user.first_name and user.last_name else ''
+            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser}, status=status.HTTP_202_ACCEPTED)
         except Token.DoesNotExist:
             return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
