@@ -12,7 +12,6 @@ class TypeDiagnostic(BaseModel):
     '''
     Model to save the types of childs state like thin, fat etc.
     '''
-    
     name = models.CharField('Tipo Diagnostico', max_length=150)
     is_active = models.BooleanField('Estado')
 
