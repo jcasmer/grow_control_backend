@@ -10,7 +10,7 @@ class TypeDiagnosticSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = TypeDiagnostic
-        fields = ('url', 'id', 'name')        
+        fields = ('url', 'id', 'name', 'is_active')        
        
         
 
@@ -21,4 +21,4 @@ class TypeDiagnosticFullDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TypeDiagnostic
-        fields = ('url', 'id','name', 'created_at', 'created_by', 'updated_at', 'updated_by')
+        fields = ('url', 'id','name', 'is_active', 'created_at', 'created_by', 'updated_at', 'updated_by')
