@@ -14,6 +14,7 @@ class TypeDiagnostic(BaseModel):
     '''
     
     name = models.CharField('Tipo Diagnostico', max_length=150)
+    is_active = models.BooleanField('Estado')
 
     def __str__(self):
         return self.name
