@@ -8,12 +8,16 @@ GENDER_TYPE = (
     ('Femenino', 'Femenino'),
 )
 
+IS_ACTIVE_TYPE = (
+    (True, 'Activo'),
+    (False, 'Inactivo')
+)
 class TypeDiagnostic(BaseModel):
     '''
     Model to save the types of childs state like thin, fat etc.
     '''
     name = models.CharField('Tipo Diagnostico', max_length=150)
-    is_active = models.BooleanField('Estado')
+    is_active = models.BooleanField('Estado', choices=IS_ACTIVE_TYPE)
 
     def __str__(self):
         return self.name
