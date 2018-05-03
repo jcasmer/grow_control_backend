@@ -36,7 +36,7 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''        
         # Se valida que el menú no se repita por ciudad
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'])            
+            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0)            
         except:
             type_diagnostic = None
         if type_diagnostic:
@@ -50,12 +50,13 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''
         # Se valida que el menú no se repita por ciudad
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'])            
+            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:
             type_diagnostic = None
         if type_diagnostic:
             raise ValidationError({'name': ['Ya se registró este diagnostico.']})              
         serializer.save()
+
     
     def perform_destroy(self, serializer): 
 
