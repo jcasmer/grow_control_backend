@@ -82,7 +82,7 @@ class TypeDiagnosticFullDataViewSet(BaseViewSet):
     '''
     permission_code = 'type_diagnostic'
     
-    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by')
+    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by').order_by('name')
     serializer_class = TypeDiagnosticFullDataSerializer
     filter_class = TypeDiagnosticFullDataFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
