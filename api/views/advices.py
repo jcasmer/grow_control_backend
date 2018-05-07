@@ -10,24 +10,25 @@ from django_filters.rest_framework import  DjangoFilterBackend
 from src.base_view import BaseViewSet
 
 from ..models import TypeDiagnostic, Advices
-from ..serializers import TypeDiagnosticSerializer, TypeDiagnosticFullDataSerializer
-from ..filters import TypeDiagnosticFilter, TypeDiagnosticFullDataFilter
+from ..serializers import AdvicesSerializer, AdvicesFullDataSerializer
+from ..filters import AdvicesFilter, AdvicesFullDataFilter
 
 
-class TypeDiagnosticViewSet(BaseViewSet):
+class AdvicesViewSet(BaseViewSet):
     '''
     Type diagnostic view
     FILTERS:
         'id': ['exact'],
-        'name':['exact', 'icontains'],
+        'description':['exact', 'icontains'],
+        'type_diagnostic':['exact',],
         'created_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],             
         'created_by': ['exact'],             
     '''
-    permission_code = 'type_diagnostic'
+    permission_code = 'advices'
     
-    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by')
-    serializer_class = TypeDiagnosticSerializer
-    filter_class = TypeDiagnosticFilter
+    queryset = Advices.objects.all().select_related('created_by','updated_by')
+    serializer_class = AdvicesSerializer
+    filter_class = AdvicesFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
 
     def perform_create(self, serializer):  # pylint: disable=arguments-differ
@@ -36,11 +37,11 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''        
         # Se valida que el menú no se repita por ciudad
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0)            
+            advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0)            
         except:
-            type_diagnostic = None
-        if type_diagnostic:
-            raise ValidationError({'name': ['Ya se registró este diagnostico.']})              
+            advice = None
+        if advice:
+            raise ValidationError({'description': ['Ya se registró esta recomendación.']})              
         serializer.save()
 
 
@@ -50,31 +51,21 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''
         # Se valida que el menú no se repita por ciudad
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
+            advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:
-            type_diagnostic = None
-        if type_diagnostic:
-            raise ValidationError({'name': ['Ya se registró este diagnostico.']})              
+            advice = None
+        if advice:
+            raise ValidationError({'description': ['Ya se registró esta recomendación.']})              
         serializer.save()
 
-    
-    def perform_destroy(self, serializer): 
 
-        errors = {}
-        advices = Advices.objects.filter(type_diagnostic=self.kwargs['pk'])
-        if advices:
-            errors['error'] = 'Este tipo de diagnostico ya tiene recomendaciones asociadas por lo tanto no puede eliminarse.'
-        if errors:
-            raise ValidationError(errors)
-        serializer.delete()
-
-
-class TypeDiagnosticFullDataViewSet(BaseViewSet):
+class AdvicesFullDataViewSet(BaseViewSet):
     '''
     Vista full data zona abordaje
     FILTROS:
         'id': ['exact'],
-        'name':['exact', 'icontains'],
+        'description':['exact', 'icontains'],
+        'type_diagnostic':['exact',],
         'created_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],
         'created_by__username': ['exact', 'icontains'],
         'updated_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],
@@ -82,7 +73,7 @@ class TypeDiagnosticFullDataViewSet(BaseViewSet):
     '''
     permission_code = 'type_diagnostic'
     
-    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by').order_by('name')
-    serializer_class = TypeDiagnosticFullDataSerializer
-    filter_class = TypeDiagnosticFullDataFilter
+    queryset = Advices.objects.all().select_related('created_by','updated_by').order_by('description')
+    serializer_class = AdvicesFullDataSerializer
+    filter_class = AdvicesFullDataFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
