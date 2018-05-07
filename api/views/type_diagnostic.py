@@ -61,7 +61,7 @@ class TypeDiagnosticViewSet(BaseViewSet):
     def perform_destroy(self, serializer): 
 
         errors = {}
-        advices = Advices.objects.filter(type_diagnostic_id=self.kwargs['pk'])
+        advices = Advices.objects.filter(type_diagnostic=self.kwargs['pk'])
         if advices:
             errors['error'] = 'Este tipo de diagnostico ya tiene recomendaciones asociadas por lo tanto no puede eliminarse.'
         if errors:
