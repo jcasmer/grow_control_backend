@@ -41,7 +41,8 @@ class Advices(BaseModel):
 
     description = models.TextField('Descripción')
     type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
-
+    is_active = models.BooleanField('Estado', choices=IS_ACTIVE_TYPE)
+    
     def __str__(self):
         return self.description
 
