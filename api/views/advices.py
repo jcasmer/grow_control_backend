@@ -35,7 +35,6 @@ class AdvicesViewSet(BaseViewSet):
         '''
         Overwrite create
         '''        
-        # Se valida que el menú no se repita por ciudad
         try:
             advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0)            
         except:
@@ -49,7 +48,6 @@ class AdvicesViewSet(BaseViewSet):
         '''
         Overwrite update
         '''
-        # Se valida que el menú no se repita por ciudad
         try:
             advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:

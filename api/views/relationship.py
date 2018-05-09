@@ -9,12 +9,12 @@ from django_filters.rest_framework import  DjangoFilterBackend
 
 from src.base_view import BaseViewSet
 
-from ..models import TypeDiagnostic, Advices
-from ..serializers import TypeDiagnosticSerializer, TypeDiagnosticFullDataSerializer
-from ..filters import TypeDiagnosticFilter, TypeDiagnosticFullDataFilter
+from ..models import Relationship, Parents
+from ..serializers import RelationshipSerializer, RelationshipFullDataSerializer
+from ..filters import RelationshipFilter, RelationshipFullDataFilter
 
 
-class TypeDiagnosticViewSet(BaseViewSet):
+class RelationshipViewSet(BaseViewSet):
     '''
     Type diagnostic view
     FILTERS:
@@ -23,11 +23,11 @@ class TypeDiagnosticViewSet(BaseViewSet):
         'created_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],             
         'created_by': ['exact'],             
     '''
-    permission_code = 'type_diagnostic'
+    permission_code = 'relationship'
     
-    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by')
-    serializer_class = TypeDiagnosticSerializer
-    filter_class = TypeDiagnosticFilter
+    queryset = Relationship.objects.all().select_related('created_by','updated_by')
+    serializer_class = RelationshipSerializer
+    filter_class = RelationshipFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
 
     def perform_create(self, serializer):  # pylint: disable=arguments-differ
@@ -35,11 +35,11 @@ class TypeDiagnosticViewSet(BaseViewSet):
         Overwrite create
         '''        
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0)            
+            type_diagnostic = Relationship.objects.filter(name=self.request.data['name'], deleted=0)            
         except:
             type_diagnostic = None
         if type_diagnostic:
-            raise ValidationError({'name': ['Ya se registró este diagnostico.']})              
+            raise ValidationError({'name': ['Ya se registró este parentesco.']})              
         serializer.save()
 
 
@@ -48,18 +48,18 @@ class TypeDiagnosticViewSet(BaseViewSet):
         Overwrite update
         '''
         try:
-            type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
+            relationship = Relationship.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:
-            type_diagnostic = None
-        if type_diagnostic:
-            raise ValidationError({'name': ['Ya se registró este diagnostico.']})              
+            relationship = None
+        if relationship:
+            raise ValidationError({'name': ['Ya se registró este parentesco.']})              
         serializer.save()
 
     
     def perform_destroy(self, serializer): 
 
         errors = {}
-        advices = Advices.objects.filter(type_diagnostic=self.kwargs['pk'])
+        advices = Parents.objects.filter(type_diagnostic=self.kwargs['pk'])
         if advices:
             errors['error'] = 'Este tipo de diagnostico ya tiene recomendaciones asociadas por lo tanto no puede eliminarse.'
         if errors:
@@ -67,7 +67,7 @@ class TypeDiagnosticViewSet(BaseViewSet):
         serializer.delete()
 
 
-class TypeDiagnosticFullDataViewSet(BaseViewSet):
+class RelationshipFullDataViewSet(BaseViewSet):
     '''
     Vista full data zona abordaje
     FILTROS:
@@ -80,7 +80,7 @@ class TypeDiagnosticFullDataViewSet(BaseViewSet):
     '''
     permission_code = 'type_diagnostic'
     
-    queryset = TypeDiagnostic.objects.all().select_related('created_by','updated_by').order_by('name')
-    serializer_class = TypeDiagnosticFullDataSerializer
-    filter_class = TypeDiagnosticFullDataFilter
+    queryset = Relationship.objects.all().select_related('created_by','updated_by').order_by('name')
+    serializer_class = RelationshipFullDataSerializer
+    filter_class = RelationshipFullDataFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)

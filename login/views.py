@@ -71,7 +71,6 @@ class LogoutView(APIView):
 
     def get(self, request):
 
-        # El token llega con el formato "Toke <numero_token>" se ejecuta el split y se toma la segunda posicion...
         token_number = request.META.get('Autorization').split(' ')[1]
         try:
             token = Token.objects.get(key=token_number)
