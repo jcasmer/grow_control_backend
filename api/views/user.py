@@ -37,8 +37,8 @@ class UserViewSet(BaseViewSet):
         método para crear usuarios
         '''
         errors = {}
-        if self.request.data['password'] and len(self.request.data['password']) < 7:
-            errors['password'] = ['La contraseña debe tener mínimo 7 caractres']
+        if self.request.data['password'] and len(self.request.data['password']) < 8:
+            errors['password'] = ['La contraseña debe tener mínimo 8 caractres']
         if not self.request.data['group']:
             errors['group'] = ['Este campo no puede ser nulo']
         user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
@@ -62,9 +62,9 @@ class UserViewSet(BaseViewSet):
         user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
         if user:
             errors['username'] = ['El usuario ya existe']
-        if self.request.data['password'] and len(self.request.data['password']) < 7:
+        if self.request.data['password'] and len(self.request.data['password']) < 8:
             errors['password'] = [
-                'La contraseña debe tener mínimo 7 caracteres']
+                'La contraseña debe tener mínimo 8 caracteres']
         if not self.request.data['group']:
             errors['group'] = ['Este campo no puede ser nulo']
         if errors:
