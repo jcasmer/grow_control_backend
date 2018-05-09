@@ -12,7 +12,7 @@ from rest_framework import serializers
 from ..serializers.group import GroupSerializer
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(label='Correo electrónico', required=True, allow_null=False)
     first_name = serializers.CharField(label='Nombre(s)', required=True, allow_null=False)
@@ -54,7 +54,7 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ('url', 'id', 'name',)
 
-class UserFullDataSerializer(serializers.HyperlinkedModelSerializer):
+class UserFullDataSerializer(serializers.ModelSerializer):
 
     groups = GroupSerializer(many=True)
     
