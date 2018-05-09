@@ -1,6 +1,5 @@
 '''
 '''
-from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -34,7 +33,6 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''
         Overwrite create
         '''        
-        # Se valida que el menú no se repita por ciudad
         try:
             type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0)            
         except:
@@ -48,7 +46,6 @@ class TypeDiagnosticViewSet(BaseViewSet):
         '''
         Overwrite update
         '''
-        # Se valida que el menú no se repita por ciudad
         try:
             type_diagnostic = TypeDiagnostic.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:

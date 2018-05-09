@@ -9,26 +9,25 @@ from django_filters.rest_framework import  DjangoFilterBackend
 
 from src.base_view import BaseViewSet
 
-from ..models import TypeDiagnostic, Advices
-from ..serializers import AdvicesSerializer, AdvicesFullDataSerializer
-from ..filters import AdvicesFilter, AdvicesFullDataFilter
+from ..models import Relationship, Parents
+from ..serializers import RelationshipSerializer, RelationshipFullDataSerializer
+from ..filters import RelationshipFilter, RelationshipFullDataFilter
 
 
-class AdvicesViewSet(BaseViewSet):
+class RelationshipViewSet(BaseViewSet):
     '''
     Type diagnostic view
     FILTERS:
         'id': ['exact'],
-        'description':['exact', 'icontains'],
-        'type_diagnostic':['exact',],
+        'name':['exact', 'icontains'],
         'created_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],             
         'created_by': ['exact'],             
     '''
-    permission_code = 'advices'
+    permission_code = 'relationship'
     
-    queryset = Advices.objects.all().select_related('created_by','updated_by')
-    serializer_class = AdvicesSerializer
-    filter_class = AdvicesFilter
+    queryset = Relationship.objects.all().select_related('created_by','updated_by')
+    serializer_class = RelationshipSerializer
+    filter_class = RelationshipFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
 
     def perform_create(self, serializer):  # pylint: disable=arguments-differ
@@ -36,11 +35,11 @@ class AdvicesViewSet(BaseViewSet):
         Overwrite create
         '''        
         try:
-            advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0)            
+            type_diagnostic = Relationship.objects.filter(name=self.request.data['name'], deleted=0)            
         except:
-            advice = None
-        if advice:
-            raise ValidationError({'description': ['Ya se registró esta recomendación.']})              
+            type_diagnostic = None
+        if type_diagnostic:
+            raise ValidationError({'name': ['Ya se registró este parentesco.']})              
         serializer.save()
 
 
@@ -49,21 +48,31 @@ class AdvicesViewSet(BaseViewSet):
         Overwrite update
         '''
         try:
-            advice = Advices.objects.filter(description=self.request.data['description'], type_diagnostic=self.request.data['type_diagnostic'], deleted=0).exclude(id=self.kwargs['pk'])          
+            relationship = Relationship.objects.filter(name=self.request.data['name'], deleted=0).exclude(id=self.kwargs['pk'])          
         except:
-            advice = None
-        if advice:
-            raise ValidationError({'description': ['Ya se registró esta recomendación.']})              
+            relationship = None
+        if relationship:
+            raise ValidationError({'name': ['Ya se registró este parentesco.']})              
         serializer.save()
 
+    
+    def perform_destroy(self, serializer): 
 
-class AdvicesFullDataViewSet(BaseViewSet):
+        errors = {}
+        relationship = Parents.objects.filter(relationship=self.kwargs['pk'])
+        if relationship:
+            errors['error'] = 'Este parentesco ya tiene registros asociados por lo tanto no puede eliminarse.'
+        if errors:
+            raise ValidationError(errors)
+        serializer.delete()
+
+
+class RelationshipFullDataViewSet(BaseViewSet):
     '''
     Vista full data zona abordaje
     FILTROS:
         'id': ['exact'],
-        'description':['exact', 'icontains'],
-        'type_diagnostic':['exact',],
+        'name':['exact', 'icontains'],
         'created_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],
         'created_by__username': ['exact', 'icontains'],
         'updated_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],
@@ -71,7 +80,7 @@ class AdvicesFullDataViewSet(BaseViewSet):
     '''
     permission_code = 'type_diagnostic'
     
-    queryset = Advices.objects.all().select_related('created_by','updated_by').order_by('description')
-    serializer_class = AdvicesFullDataSerializer
-    filter_class = AdvicesFullDataFilter
+    queryset = Relationship.objects.all().select_related('created_by','updated_by').order_by('name')
+    serializer_class = RelationshipFullDataSerializer
+    filter_class = RelationshipFullDataFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)

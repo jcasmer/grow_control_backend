@@ -29,7 +29,8 @@ class Relationship(BaseModel):
     '''
 
     name = models.CharField('Parentesco', max_length=150)
-
+    is_active = models.BooleanField('Estado', choices=IS_ACTIVE_TYPE)
+    
     def __str__(self):
         return self.name
 

@@ -1,10 +1,7 @@
 '''
 '''
-import re
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
-from django.core.validators import validate_email
 
 from rest_framework import status, viewsets
 from rest_framework.exceptions import ValidationError
@@ -40,49 +37,48 @@ class UserViewSet(BaseViewSet):
         método para crear usuarios
         '''
         errors = {}
-        if not self.request.data['first_name']:
-            errors['first_name'] = ['Este campo no puede estar en blanco.']
-        if not self.request.data['last_name']:
-            errors['last_name'] = ['Este campo no puede estar en blanco.']
+        if self.request.data['password'] and len(self.request.data['password']) < 8:
+            errors['password'] = ['La contraseña debe tener mínimo 8 caractres']
+        if not self.request.data['group']:
+            errors['group'] = ['Este campo no puede ser nulo']
+        user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
+        if user:
+            errors['username'] = ['El usuario ya existe']
         if errors:
             raise ValidationError(errors)
-        try:            
-            user = User.objects.get(username=self.request.data['username'])
-            errors['username'] = ['Este usuario ya se encuentra registrado.']
-        except ObjectDoesNotExist:           
-            super().perform_create(serializer)
-            user = User.objects.get(username=self.request.data['username']) 
-            user.is_superuser = True
-            user.save()
-        if errors:
-            raise ValidationError(errors)
+        group_id = self.request.data.get('group')
+        group = Group.objects.get(id=group_id)            
+        super().perform_create(serializer)
+        user = User.objects.get(username=self.request.data['username'])
+        user.groups.add(group)
+        user.save()
+        
 
     def perform_update(self, serializer):
         '''
         método para actualizar usuarios
         '''
         errors = {}
-        if not self.request.data['first_name']:
-            errors['first_name'] = ['Este campo no puede estar en blanco.']
-        if not self.request.data['last_name']:
-            errors['last_name'] = ['Este campo no puede estar en blanco.']
+        user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
+        if user:
+            errors['username'] = ['El usuario ya existe']
+        if self.request.data['password'] and len(self.request.data['password']) < 8:
+            errors['password'] = [
+                'La contraseña debe tener mínimo 8 caracteres']
+        if not self.request.data['group']:
+            errors['group'] = ['Este campo no puede ser nulo']
         if errors:
             raise ValidationError(errors)
-            
-        try:
-            user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
-            if user:
-                errors['username'] = ['Este usuario ya se encuentra registrado.']
-            else:
-                serializer.save()
-                user = User.objects.get(username=self.request.data['username'])
-                user.is_superuser = True
-                user.save()
-        except Exception as e:
-            errors['error'] = [e]
-        
-        if errors:
-            raise ValidationError(errors)
+        serializer.save()
+        user = User.objects.get(username=self.request.data['username'])
+        group_id = self.request.data.get('group')
+        group_user = Group.objects.get(id=group_id)
+        groups = Group.objects.all()
+        for group in groups:
+            group.user_set.remove(user)
+        user.groups.add(group_user)
+        user.save()
+
 
 
 class UserFullDataViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):

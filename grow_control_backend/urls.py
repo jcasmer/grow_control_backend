@@ -27,6 +27,8 @@ router.register(r'type-diagnostic', application_views.type_diagnostic.TypeDiagno
 router.register(r'type-diagnostic-full-data', application_views.type_diagnostic.TypeDiagnosticFullDataViewSet, base_name='type_diagnostic_full_data')
 router.register(r'advices', application_views.advices.AdvicesViewSet)
 router.register(r'advices-full-data', application_views.advices.AdvicesFullDataViewSet, base_name='advices-full-data')
+router.register(r'relationship', application_views.relationship.RelationshipViewSet)
+router.register(r'relationship-full-data', application_views.relationship.RelationshipFullDataViewSet, base_name='relationship-full-data')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
