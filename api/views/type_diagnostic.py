@@ -1,6 +1,5 @@
 '''
 '''
-from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework import status
 from rest_framework.exceptions import ValidationError

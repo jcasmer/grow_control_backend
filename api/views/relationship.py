@@ -59,9 +59,9 @@ class RelationshipViewSet(BaseViewSet):
     def perform_destroy(self, serializer): 
 
         errors = {}
-        advices = Parents.objects.filter(type_diagnostic=self.kwargs['pk'])
-        if advices:
-            errors['error'] = 'Este tipo de diagnostico ya tiene recomendaciones asociadas por lo tanto no puede eliminarse.'
+        relationship = Parents.objects.filter(relationship=self.kwargs['pk'])
+        if relationship:
+            errors['error'] = 'Este parentesco ya tiene registros asociados por lo tanto no puede eliminarse.'
         if errors:
             raise ValidationError(errors)
         serializer.delete()
