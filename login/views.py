@@ -6,7 +6,7 @@ Vista del archivo login
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -56,8 +56,16 @@ class LoginView(APIView):
 
             payload = jwt_payload_handler(user)
             token = jwt_encode_handler(payload)
+            code_permissions = []
+            try:
+                permissions = Permission.objects.filter(user=user) | Permission.objects.filter(group__user=user)            
+                for permission in permissions:
+                    code_permissions.append(permission.codename)
+            except:
+                pass
+            
             full_name = user.first_name + ' ' + user.last_name if user.first_name and user.last_name else ''
-            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser}, status=status.HTTP_202_ACCEPTED)
+            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser, 'permissions': code_permissions}, status=status.HTTP_202_ACCEPTED)
         except Token.DoesNotExist:
             return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:

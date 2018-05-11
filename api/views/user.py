@@ -39,19 +39,24 @@ class UserViewSet(BaseViewSet):
         errors = {}
         if self.request.data['password'] and len(self.request.data['password']) < 8:
             errors['password'] = ['La contraseña debe tener mínimo 8 caractres']
-        if not self.request.data['group']:
-            errors['group'] = ['Este campo no puede ser nulo']
-        user = User.objects.filter(username=self.request.data['username']).exclude(id=self.kwargs['pk'])
+        print(self.request.data['confirm_password'])
+        # if self.request.data['confirm_password']:
+        #     errors['confirm_password'] = ['Este campo no puede ser nulo']
+        if self.request.data['confirm_password'] and self.request.data['confirm_password'] and len(self.request.data['confirm_password']) < 8:
+            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
+        # if self.request.data['confirm_password'] and len(self.request.data['confirm_password']) > 8:
+        #     errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
+        if not self.request.data['groups']:
+            errors['groups'] = ['Este campo no puede ser nulo']
+        user = User.objects.filter(username=self.request.data['username'])
         if user:
             errors['username'] = ['El usuario ya existe']
         if errors:
             raise ValidationError(errors)
-        group_id = self.request.data.get('group')
-        group = Group.objects.get(id=group_id)            
+        # serializer.data['groups'] = group
+        # print(serializer)
         super().perform_create(serializer)
-        user = User.objects.get(username=self.request.data['username'])
-        user.groups.add(group)
-        user.save()
+        # serializer.save()
         
 
     def perform_update(self, serializer):
@@ -65,13 +70,13 @@ class UserViewSet(BaseViewSet):
         if self.request.data['password'] and len(self.request.data['password']) < 8:
             errors['password'] = [
                 'La contraseña debe tener mínimo 8 caracteres']
-        if not self.request.data['group']:
-            errors['group'] = ['Este campo no puede ser nulo']
+        if not self.request.data['groups']:
+            errors['groups'] = ['Este campo no puede ser nulo']
         if errors:
             raise ValidationError(errors)
         serializer.save()
         user = User.objects.get(username=self.request.data['username'])
-        group_id = self.request.data.get('group')
+        group_id = self.request.data.get('groups')
         group_user = Group.objects.get(id=group_id)
         groups = Group.objects.all()
         for group in groups:
