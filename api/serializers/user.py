@@ -22,7 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(kwargs)
         if 'data' in kwargs:
             if 'partial' in kwargs:
                 self.fields['password'].required = False

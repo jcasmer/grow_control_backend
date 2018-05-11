@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 from api import views as application_views
 
 router = DefaultRouter()
+router.register(r'group-full-data', application_views.groups.GroupsFullDataViewSet, base_name='group_full_data')
 router.register(r'user', application_views.user.UserViewSet)
 router.register(r'user-full-data', application_views.user.UserFullDataViewSet, base_name='user_full_data')
 router.register(r'type-diagnostic', application_views.type_diagnostic.TypeDiagnosticViewSet)

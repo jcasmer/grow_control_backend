@@ -68,7 +68,7 @@ class TypeDiagnosticViewSet(BaseViewSet):
 
 class TypeDiagnosticFullDataViewSet(BaseViewSet):
     '''
-    Vista full data zona abordaje
+    Vista full data tipo diagnóstico
     FILTROS:
         'id': ['exact'],
         'name':['exact', 'icontains'],
