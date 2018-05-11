@@ -69,7 +69,7 @@ class RelationshipViewSet(BaseViewSet):
 
 class RelationshipFullDataViewSet(BaseViewSet):
     '''
-    Vista full data zona abordaje
+    Vista full data parentesco
     FILTROS:
         'id': ['exact'],
         'name':['exact', 'icontains'],
