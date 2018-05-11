@@ -9,8 +9,7 @@ from django.contrib.auth.models import Group, User
 
 from rest_framework import serializers
 
-from ..serializers.group import GroupSerializer
-
+# from ..serializers.group import GroupSerializer
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -19,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(label='Apellido(s)', required=True, allow_null=False)
     password = serializers.CharField(label='Contraseña', required=True, allow_null=False, style={'input_type': 'password'}, write_only=True)
     confirm_password = serializers.CharField(label='Confirme contraseña', required=False, allow_null=True, allow_blank=True, style={'input_type': 'password'}, write_only=True)
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'data' in kwargs:
@@ -65,18 +64,15 @@ class UserSerializer(serializers.ModelSerializer):
                     ), ]
             }
         }
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ('url', 'id', 'name',)
-
+       
 class UserFullDataSerializer(serializers.ModelSerializer):
 
-    groups = GroupSerializer(many=True)
+    group_name = serializers.SerializerMethodField()
+
+    def get_group_name(self, obj):
+        return obj.groups.get().name
     
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', 'password', 'first_name', 'last_name',
-                  'email', 'is_active', 'groups')
+        fields = ('url', 'id', 'username', 'password', 'first_name',
+                  'last_name', 'email', 'is_active', 'is_superuser', 'is_staff', 'groups', 'group_name')

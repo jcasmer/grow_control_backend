@@ -3,15 +3,16 @@
 
 from django.contrib.auth.models import Group, Permission
 
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
+from rest_framework import mixins
 
 from ..serializers import GroupSerializer
 
 from src.base_view import BaseViewSet
 
-class GroupsFullDataViewSet(BaseViewSet):
+class GroupsViewSet(BaseViewSet):
     '''
     VieSet para grupos
     '''
@@ -25,3 +26,12 @@ class GroupsFullDataViewSet(BaseViewSet):
     def list(self, request):
         self.permission_code = None
         return super().list(request)
+
+
+class GroupsFullDataViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    
+    
+    permission_code = 'group'
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    # filter_backends = (DjangoFilterBackend, OrderingFilter,)
