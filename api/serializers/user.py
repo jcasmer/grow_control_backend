@@ -55,10 +55,15 @@ class UserSerializer(serializers.ModelSerializer):
         if errors:
             raise ValidationError(errors)
         try:
-            group = Group.objects.get(id=validated_data.get('groups'))
-        except:
+            groups_data = validated_data.pop('groups')
+            group = Group.objects.get(id=groups_data)
+        except Exception as e:
             group = None
-        user = User.objects.create_user(**validated_data)   
+        try:
+            validated_data.pop('confirm_password')
+        except:
+            pass
+        user = User.objects.create_user(**validated_data)
         user.groups.add(group)
         if group.name == 'Administrador':
             user.is_staff = True
@@ -67,10 +72,34 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        user = super().update(instance, validated_data)
-        # user.set_password(validated_data.get('password'))
-        user.save()
-        return user
+
+        errors = {}
+        user = User.objects.filter(username=validated_data.get('username')).exclude(id=instance.id)
+        if user:
+            errors['username'] = ['El usuario ya existe']
+        if validated_data.get('password') and len(validated_data.get('password')) < 8:
+            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if validated_data.get('confirm_password') and len(validated_data.get('confirm_password')) < 8:
+            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if errors:
+            raise ValidationError(errors)
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        
+        try:
+            group = Group.objects.get(id=validated_data['groups'])
+        except Exception as e:
+            group = None
+        instance.groups.add(group)
+        if group.name == 'Administrador':
+            instance.is_staff = True
+            instance.is_superuser= True
+        
+        instance.save()
+        return instance
 
     class Meta:
 
