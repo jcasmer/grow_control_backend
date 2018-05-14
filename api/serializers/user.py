@@ -4,9 +4,9 @@ import re
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.core import validators
-
 from django.contrib.auth.models import Group, User
 
+from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 
 # from ..serializers.group import GroupSerializer
@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # user = super().create(validated_data)
         # groups_data = validated_data.pop('groups')
-        erros = {}
+        errors = {}
         user = User.objects.filter(username=validated_data.get('username'))
         if user:
             errors['username'] = ['El usuario ya existe']
@@ -50,7 +50,8 @@ class UserSerializer(serializers.ModelSerializer):
         if not validated_data.get('groups'):
             errors['groups'] = ['Este campo no puede ser nulo']
         if validated_data.get('password') != validated_data.get('confirm_password'):
-            raise serializers.ValidationError({'confirm_password': ['Las contraseñas o coinciden.']})
+            errors['password'] = ['Las contraseñas o coinciden']
+            errors['confirm_password'] = ['Las contraseñas o coinciden']
         if errors:
             raise ValidationError(errors)
         try:
@@ -63,12 +64,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.is_staff = True
             user.is_superuser= True
             user.save()
-        # user.set_password(validated_data.get('password'))
-        # user.save()
         return user
 
     def update(self, instance, validated_data):
-        print('ss')
         user = super().update(instance, validated_data)
         # user.set_password(validated_data.get('password'))
         user.save()
