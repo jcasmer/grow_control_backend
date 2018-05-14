@@ -63,9 +63,12 @@ class LoginView(APIView):
                     code_permissions.append(permission.codename)
             except:
                 pass
-            
+            group_permissions = []
+            groups = Group.objects.filter(user=user)
+            for group in groups:
+                group_permissions.append(group.name)
             full_name = user.first_name + ' ' + user.last_name if user.first_name and user.last_name else ''
-            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser, 'permissions': code_permissions}, status=status.HTTP_202_ACCEPTED)
+            return Response({'token': token,'username': user.username, 'full_name': full_name , 'is_superuser': user.is_superuser, 'permissions': code_permissions, 'groups':group_permissions}, status=status.HTTP_202_ACCEPTED)
         except Token.DoesNotExist:
             return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
