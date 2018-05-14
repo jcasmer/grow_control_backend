@@ -24,10 +24,21 @@ class UserSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         if 'data' in kwargs:
             if 'partial' in kwargs:
-                self.fields['password'].required = False
-                self.fields['password'].allow_blank = True
-                self.fields['confirm_password'].required = False
-                self.fields['confirm_password'].allow_blank = True
+                
+                if kwargs['data']['changePassword']:
+                    self.fields['password'].allow_null = False    
+                    self.fields['confirm_password'].allow_null = False
+                    self.fields['password'].required = True
+                    self.fields['password'].allow_blank = False
+                    self.fields['confirm_password'].required = True
+                    self.fields['confirm_password'].allow_blank = False
+                else:
+                    self.fields['password'].allow_null = True    
+                    self.fields['confirm_password'].allow_null = True
+                    self.fields['password'].required = False
+                    self.fields['password'].allow_blank = True
+                    self.fields['confirm_password'].required = False
+                    self.fields['confirm_password'].allow_blank = True
             else:
                 self.fields['password'].required = True
                 self.fields['password'].allow_blank = False
@@ -36,24 +47,32 @@ class UserSerializer(serializers.ModelSerializer):
                 self.fields['confirm_password'].allow_null = False
                 self.fields['confirm_password'].allow_blank = False
 
-    def create(self, validated_data):
-        # user = super().create(validated_data)
-        # groups_data = validated_data.pop('groups')
+    def validate(self, data):
         errors = {}
-        user = User.objects.filter(username=validated_data.get('username'))
-        if user:
-            errors['username'] = ['El usuario ya existe']
-        if validated_data.get('password') and len(validated_data.get('password')) < 8:
-            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres']
-        if validated_data.get('confirm_password') and len(validated_data.get('confirm_password')) < 8:
-            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres']
-        if not validated_data.get('groups'):
+        if self.instance:
+            user = User.objects.filter(username=data.get('username')).exclude(id=self.instance.id)
+            if user:
+                errors['username'] = ['El usuario ya existe']
+        else:
+            user = User.objects.filter(username=data.get('username'))
+            if user:
+                errors['username'] = ['El usuario ya existe']
+        if data.get('password') and len(data.get('password')) < 8:
+            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres.']
+        if data.get('confirm_password') and len(data.get('confirm_password')) < 8:
+            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres.']
+        if not data.get('groups'):
             errors['groups'] = ['Este campo no puede ser nulo']
-        if validated_data.get('password') != validated_data.get('confirm_password'):
-            errors['password'] = ['Las contraseñas o coinciden']
-            errors['confirm_password'] = ['Las contraseñas o coinciden']
+        if data.get('password') != data.get('confirm_password'):
+            errors['password'] = ['Las contraseñas no coinciden.']
+            errors['confirm_password'] = ['Las contraseñas no coinciden.']
         if errors:
             raise ValidationError(errors)
+        
+        return data
+
+
+    def create(self, validated_data):
         try:
             groups_data = validated_data.pop('groups')
             group = Group.objects.get(id=groups_data)
@@ -75,28 +94,26 @@ class UserSerializer(serializers.ModelSerializer):
 
         errors = {}
         user = User.objects.filter(username=validated_data.get('username')).exclude(id=instance.id)
-        if user:
-            errors['username'] = ['El usuario ya existe']
-        if validated_data.get('password') and len(validated_data.get('password')) < 8:
-            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres']
-        if validated_data.get('confirm_password') and len(validated_data.get('confirm_password')) < 8:
-            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres']
-        if errors:
-            raise ValidationError(errors)
-        instance.username = validated_data.get('username', instance.username)
+
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+
         try:
             group = Group.objects.get(id=validated_data['groups'])
         except Exception as e:
             group = None
+        groups = Group.objects.all()
+        for group_remove in groups:
+            group_remove.user_set.remove(instance)
         instance.groups.add(group)
         if group.name == 'Administrador':
             instance.is_staff = True
             instance.is_superuser= True
+        else:
+            instance.is_staff = False
+            instance.is_superuser= False
         
         instance.save()
         return instance
