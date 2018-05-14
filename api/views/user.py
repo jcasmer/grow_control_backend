@@ -32,31 +32,31 @@ class UserViewSet(BaseViewSet):
     filter_backends = (DjangoFilterBackend, OrderingFilter)
    # ordering_fields = ('username', 'email')
 
-    def perform_create(self, serializer):
-        '''
-        método para crear usuarios
-        '''
-        errors = {}
-        if self.request.data['password'] and len(self.request.data['password']) < 8:
-            errors['password'] = ['La contraseña debe tener mínimo 8 caractres']
-        print(self.request.data['confirm_password'])
-        # if self.request.data['confirm_password']:
-        #     errors['confirm_password'] = ['Este campo no puede ser nulo']
-        if self.request.data['confirm_password'] and self.request.data['confirm_password'] and len(self.request.data['confirm_password']) < 8:
-            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
-        # if self.request.data['confirm_password'] and len(self.request.data['confirm_password']) > 8:
-        #     errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
-        if not self.request.data['groups']:
-            errors['groups'] = ['Este campo no puede ser nulo']
-        user = User.objects.filter(username=self.request.data['username'])
-        if user:
-            errors['username'] = ['El usuario ya existe']
-        if errors:
-            raise ValidationError(errors)
-        # serializer.data['groups'] = group
-        # print(serializer)
-        super().perform_create(serializer)
-        # serializer.save()
+    # # def perform_create(self, serializer):
+    # #     '''
+    # #     método para crear usuarios
+    #     '''
+    #     # errors = {}
+    #     # if self.request.data['password'] and len(self.request.data['password']) < 8:
+    #     #     errors['password'] = ['La contraseña debe tener mínimo 8 caractres']
+    #     # print(self.request.data['confirm_password'])
+    #     # # if self.request.data['confirm_password']:
+    #     # #     errors['confirm_password'] = ['Este campo no puede ser nulo']
+    #     # if self.request.data['confirm_password'] and self.request.data['confirm_password'] and len(self.request.data['confirm_password']) < 8:
+    #     #     errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
+    #     # # if self.request.data['confirm_password'] and len(self.request.data['confirm_password']) > 8:
+    #     # #     errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caractres']
+    #     # if not self.request.data['groups']:
+    #     #     errors['groups'] = ['Este campo no puede ser nulo']
+    #     # user = User.objects.filter(username=self.request.data['username'])
+    #     # if user:
+    #     #     errors['username'] = ['El usuario ya existe']
+    #     if errors:
+    #         raise ValidationError(errors)
+    #     # serializer.data['groups'] = group
+    #     # print(serializer)
+    #     # super().perform_create(serializer)
+    #     # serializer.save()
         
 
     def perform_update(self, serializer):
@@ -68,8 +68,12 @@ class UserViewSet(BaseViewSet):
         if user:
             errors['username'] = ['El usuario ya existe']
         if self.request.data['password'] and len(self.request.data['password']) < 8:
-            errors['password'] = [
-                'La contraseña debe tener mínimo 8 caracteres']
+            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if self.request.data['confirm_password'] and len(self.request.data['confirm_password']) < 8:
+            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if self.request.data['confirm_password']  != self.request.data['password']:
+            errors['password'] = ['Las contraseñas no coinciden']
+            errors['confirm_password'] = ['']
         if not self.request.data['groups']:
             errors['groups'] = ['Este campo no puede ser nulo']
         if errors:

@@ -38,19 +38,30 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # user = super().create(validated_data)
-        groups_data = validated_data.pop('groups')
-        # try:
-        #     print(.get('confirm_password'))
-        #     validated_data.pop('confirm_password')
-        # except Exception as e:
-        #     pass
-        print(validated_data.get('password'),validated_data.get('confirm_password'))
+        # groups_data = validated_data.pop('groups')
+        erros = {}
+        user = User.objects.filter(username=validated_data.get('username'))
+        if user:
+            errors['username'] = ['El usuario ya existe']
+        if validated_data.get('password') and len(validated_data.get('password')) < 8:
+            errors['password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if validated_data.get('confirm_password') and len(validated_data.get('confirm_password')) < 8:
+            errors['confirm_password'] = ['La contraseña debe tener mínimo 8 caracteres']
+        if not validated_data.get('groups'):
+            errors['groups'] = ['Este campo no puede ser nulo']
         if validated_data.get('password') != validated_data.get('confirm_password'):
             raise serializers.ValidationError({'confirm_password': ['Las contraseñas o coinciden.']})
+        if errors:
+            raise ValidationError(errors)
+        try:
+            group = Group.objects.get(id=validated_data.get('groups'))
+        except:
+            group = None
         user = User.objects.create_user(**validated_data)   
-        user.groups.set(groups_data)
-        if Group.objects.get(id=validated_data.get('groups')).name == 'Administrador':
+        user.groups.add(group)
+        if group.name == 'Administrador':
             user.is_staff = True
+            user.is_superuser= True
             user.save()
         # user.set_password(validated_data.get('password'))
         # user.save()
