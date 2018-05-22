@@ -31,6 +31,8 @@ router.register(r'advices', application_views.advices.AdvicesViewSet)
 router.register(r'advices-full-data', application_views.advices.AdvicesFullDataViewSet, base_name='advices-full-data')
 router.register(r'relationship', application_views.relationship.RelationshipViewSet)
 router.register(r'relationship-full-data', application_views.relationship.RelationshipFullDataViewSet, base_name='relationship-full-data')
+router.register(r'parents', application_views.parents.ParentsViewSet)
+router.register(r'parents-full-data', application_views.parents.ParentsFullDataViewSet, base_name='parents-full-data')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
