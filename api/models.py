@@ -58,7 +58,7 @@ class Parents(BaseModel):
 
     DOCUMENT_TYPE = (
         ('Cédula', 'Cédula'),
-        ('Cedula Extranjería', 'Cedula Extranjería'),
+        ('Cédula Extranjería', 'Cédula Extranjería'),
     )
     
     SOCIAL_STRATUM_TYPE = (
@@ -68,7 +68,7 @@ class Parents(BaseModel):
         ('3', 'Estrato 3'),
         ('4', 'Estrato 4'),
         ('5', 'Estrato 5'),
-        ('6', 'Estrato 6'),
+        ('6', 'Otro'),
     )
 
     document_type = models.CharField('Tipo de documento', max_length=100, choices=DOCUMENT_TYPE)
@@ -82,7 +82,7 @@ class Parents(BaseModel):
     social_stratum = models.CharField('Estrato', max_length=3, choices=SOCIAL_STRATUM_TYPE)
     height = models.FloatField('Altura')
     weight = models.FloatField('Peso')
-    is_active = models.BooleanField('Estado', choices=IS_ACTIVE_TYPE)
+    is_active = models.BooleanField('Estado', default=True)
 
     def __str__(self):
         return self.name
