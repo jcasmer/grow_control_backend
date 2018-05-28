@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 
 from lib.validators import isnumbervalidator
 from src.model import BaseModel
@@ -76,7 +76,7 @@ class Parents(BaseModel):
 
     document_type = models.CharField('Tipo de documento', max_length=100, choices=DOCUMENT_TYPE)
     document = models.CharField('Documento', max_length=20, unique=True, 
-            error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE}, validators=[isnumbervalidator])
+            error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE}, validators=[isnumbervalidator, MinLengthValidator(6)])
     name = models.CharField('Nombre', max_length=150)
     age = models.CharField('Edad', max_length=3)
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
@@ -90,7 +90,6 @@ class Parents(BaseModel):
 
     def __str__(self):
         return self.name
-
 
 class Childs(BaseModel):
     '''
