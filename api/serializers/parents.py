@@ -6,7 +6,7 @@ from ..models import Parents
 
 
 class ParentsSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Parents
         fields = ('url', 'id', 'document_type', 'document', 'name', 'age', 'gender', 'relationship',

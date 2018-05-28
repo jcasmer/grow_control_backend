@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
 
+from lib.validators import isnumbervalidator
 from src.model import BaseModel
 
 GENDER_TYPE = (
@@ -74,21 +75,21 @@ class Parents(BaseModel):
     )
 
     document_type = models.CharField('Tipo de documento', max_length=100, choices=DOCUMENT_TYPE)
-    document = models.CharField('Documento', max_length=20, unique=True, error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE})
+    document = models.CharField('Documento', max_length=20, unique=True, 
+            error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE}, validators=[isnumbervalidator, MinLengthValidator(6)])
     name = models.CharField('Nombre', max_length=150)
-    age = models.CharField('Edad', max_length=3)
+    age = models.IntegerField('Edad', validators=[MinValueValidator(1)])
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
-    phone_number = models.CharField('Teléfono', max_length=20)
+    phone_number = models.CharField('Teléfono', max_length=20, validators=[isnumbervalidator, MinLengthValidator(10)])
     email = models.EmailField('Correo Electrónico')
     social_stratum = models.CharField('Estrato', max_length=3, choices=SOCIAL_STRATUM_TYPE)
-    height = models.FloatField('Altura', validators=[MinValueValidator(1), MaxValueValidator(3)])
-    weight = models.FloatField('Peso', validators=[MinValueValidator(1), MaxValueValidator(3)])
+    height = models.FloatField('Altura', validators=[MinValueValidator(1)])
+    weight = models.FloatField('Peso', validators=[MinValueValidator(1)])
     is_active = models.BooleanField('Estado', default=True)
 
     def __str__(self):
         return self.name
-
 
 class Childs(BaseModel):
     '''
