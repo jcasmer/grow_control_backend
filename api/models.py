@@ -78,7 +78,7 @@ class Parents(BaseModel):
     document = models.CharField('Documento', max_length=20, unique=True, 
             error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE}, validators=[isnumbervalidator, MinLengthValidator(6)])
     name = models.CharField('Nombre', max_length=150)
-    age = models.CharField('Edad', max_length=3)
+    age = models.IntegerField('Edad', validators=[MinValueValidator(1), MaxValueValidator(3)])
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
     phone_number = models.CharField('Teléfono', max_length=20)
