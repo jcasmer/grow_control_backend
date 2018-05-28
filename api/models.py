@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 from src.model import BaseModel
 
 GENDER_TYPE = (
@@ -80,8 +82,8 @@ class Parents(BaseModel):
     phone_number = models.CharField('Teléfono', max_length=20)
     email = models.EmailField('Correo Electrónico')
     social_stratum = models.CharField('Estrato', max_length=3, choices=SOCIAL_STRATUM_TYPE)
-    height = models.FloatField('Altura')
-    weight = models.FloatField('Peso')
+    height = models.FloatField('Altura', validators=[MinValueValidator(1), MaxValueValidator(3)])
+    weight = models.FloatField('Peso', validators=[MinValueValidator(1), MaxValueValidator(3)])
     is_active = models.BooleanField('Estado', default=True)
 
     def __str__(self):
