@@ -31,6 +31,12 @@ class UserViewSet(BaseViewSet):
     filter_class = UserFilter
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     
+    def perform_destroy(self, serializer): 
+
+        errors = {}
+        user = User.objects.get(id=self.kwargs['pk'])
+        user.is_active = False
+        user.save()
 
 class UserFullDataViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 

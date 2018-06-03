@@ -8,7 +8,7 @@ from django_filters.rest_framework import  DjangoFilterBackend
 
 from src.base_view import BaseViewSet
 
-from ..models import Parents
+from ..models import Parents, ParentsChilds
 from ..serializers import ParentsSerializer, ParentsFullDataSerializer
 from ..filters import ParentsFilter, ParentsFullDataFilter
 
@@ -50,8 +50,8 @@ class ParentsViewSet(BaseViewSet):
     #     try:
     #         parents = Parents.objects.filter(name=self.request.data['document'], deleted=0)            
     #     except:
-    #         type_diagnostic = None
-    #     if type_diagnostic:
+    #         parents = None
+    #     if parents:
     #         raise ValidationError({'name': ['Ya se registró este documento']})              
     #     serializer.save()
 
@@ -69,15 +69,15 @@ class ParentsViewSet(BaseViewSet):
     #     serializer.save()
 
     
-    # def perform_destroy(self, serializer): 
+    def perform_destroy(self, serializer): 
 
-    #     errors = {}
-    #     advices = Advices.objects.filter(type_diagnostic=self.kwargs['pk'])
-    #     if advices:
-    #         errors['error'] = 'Este tipo de diagnostico ya tiene recomendaciones asociadas por lo tanto no puede eliminarse.'
-    #     if errors:
-    #         raise ValidationError(errors)
-    #     serializer.delete()
+        errors = {}
+        parents = ParentsChilds.objects.filter(parent=self.kwargs['pk'])
+        if advices:
+            errors['error'] = 'Esta persona ya tiene un menor asociado por lo tanto no puede eliminarse.'
+        if errors:
+            raise ValidationError(errors)
+        serializer.delete()
 
 
 class ParentsFullDataViewSet(BaseViewSet):
