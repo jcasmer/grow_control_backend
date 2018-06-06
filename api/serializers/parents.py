@@ -9,7 +9,7 @@ class ParentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Parents
-        fields = ('url', 'id', 'document_type', 'document', 'name', 'age', 'gender', 'relationship',
+        fields = ('url', 'id', 'document_type', 'document', 'name', 'age', 'gender',
                 'phone_number', 'email', 'social_stratum', 'height', 'weight', 'is_active')        
        
 
@@ -25,6 +25,6 @@ class ParentsFullDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Parents
-        fields = ('url', 'id', 'document_type', 'document', 'name', 'age', 'gender', 'relationship',
+        fields = ('url', 'id', 'document_type', 'document', 'name', 'age', 'gender',
                 'phone_number', 'email', 'social_stratum', 'height', 'weight', 'is_active', 'created_by',
                 'created_at', 'updated_by', 'updated_at')

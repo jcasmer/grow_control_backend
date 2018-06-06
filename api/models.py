@@ -80,7 +80,6 @@ class Parents(BaseModel):
     name = models.CharField('Nombre', max_length=150)
     age = models.IntegerField('Edad', validators=[MinValueValidator(1)])
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
-    relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
     phone_number = models.CharField('Teléfono', max_length=20, validators=[isnumbervalidator, MinLengthValidator(10)])
     email = models.EmailField('Correo Electrónico')
     social_stratum = models.CharField('Estrato', max_length=3, choices=SOCIAL_STRATUM_TYPE)
@@ -110,6 +109,7 @@ class ParentsChilds(models.Model):
     '''
     parent = models.ForeignKey(Parents, verbose_name='Adulto', on_delete=models.PROTECT)
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
+    relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
 
 
 class ChildsDetail(BaseModel):
