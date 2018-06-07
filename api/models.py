@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
@@ -102,6 +103,11 @@ class Childs(BaseModel):
     def __str__(self):
         return self.name
 
+    @property
+    def age(self):
+        today = date.today()
+        return today.year - date_born.year - ((today.month, today.day) < (date_born.month, date_born.day))
+
 
 class ParentsChilds(models.Model):
     '''
@@ -118,7 +124,6 @@ class ChildsDetail(BaseModel):
     '''
 
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
-    age = models.CharField('Edad', max_length=3)
     height = models.FloatField('Altura')
     weight = models.FloatField('Peso')
     type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
