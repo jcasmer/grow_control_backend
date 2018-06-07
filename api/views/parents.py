@@ -73,7 +73,7 @@ class ParentsViewSet(BaseViewSet):
 
         errors = {}
         parents = ParentsChilds.objects.filter(parent=self.kwargs['pk'])
-        if advices:
+        if parents:
             errors['error'] = 'Esta persona ya tiene un menor asociado por lo tanto no puede eliminarse.'
         if errors:
             raise ValidationError(errors)

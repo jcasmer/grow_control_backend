@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
@@ -80,7 +81,6 @@ class Parents(BaseModel):
     name = models.CharField('Nombre', max_length=150)
     age = models.IntegerField('Edad', validators=[MinValueValidator(1)])
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
-    relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
     phone_number = models.CharField('Teléfono', max_length=20, validators=[isnumbervalidator, MinLengthValidator(10)])
     email = models.EmailField('Correo Electrónico')
     social_stratum = models.CharField('Estrato', max_length=3, choices=SOCIAL_STRATUM_TYPE)
@@ -103,6 +103,11 @@ class Childs(BaseModel):
     def __str__(self):
         return self.name
 
+    @property
+    def age(self):
+        today = date.today()
+        return today.year - date_born.year - ((today.month, today.day) < (date_born.month, date_born.day))
+
 
 class ParentsChilds(models.Model):
     '''
@@ -110,6 +115,7 @@ class ParentsChilds(models.Model):
     '''
     parent = models.ForeignKey(Parents, verbose_name='Adulto', on_delete=models.PROTECT)
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
+    relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
 
 
 class ChildsDetail(BaseModel):
@@ -118,7 +124,6 @@ class ChildsDetail(BaseModel):
     '''
 
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
-    age = models.CharField('Edad', max_length=3)
     height = models.FloatField('Altura')
     weight = models.FloatField('Peso')
     type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
