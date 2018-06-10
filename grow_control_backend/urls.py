@@ -39,4 +39,5 @@ urlpatterns = [
     path('api/login/', include('login.urls')) ,
     path('api/', include(router.urls)),
     path('api/validate-parent/', application_views.validate_parents.ValidateParentsView),
+    path('api/register-child/', application_views.register_child.RegistrationChildView),
 ]
