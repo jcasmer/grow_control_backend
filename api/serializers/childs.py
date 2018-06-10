@@ -11,7 +11,13 @@ class ChildsSerializer(serializers.ModelSerializer):
         model = Childs
         fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'created_by',
                 'created_at', 'updated_by', 'updated_at')   
-       
+
+
+class ChildsSaveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Childs
+        fields = ('id', 'document', 'name', 'gender', 'date_born')   
 
 class ChildsFullDataSerializer(serializers.ModelSerializer):
     
