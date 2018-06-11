@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'growcontrol',
         'USER': 'grow',
         'PASSWORD': 'grow1234',
-        'HOST': '192.168.1.59',
+        'HOST': '192.168.1.76',
         'PORT': '5432',
     }
 }

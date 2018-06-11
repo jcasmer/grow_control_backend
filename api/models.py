@@ -98,7 +98,7 @@ class Childs(BaseModel):
     document = models.CharField('Documento', max_length=20, unique=True, error_messages={'unique': UNIQUE_DOCUMENT_MESSAGE})
     name = models.CharField('Nombre', max_length=150)
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
-    date_born = models.DateTimeField('Fecha de nacimiento')
+    date_born = models.DateField('Fecha de nacimiento')
 
     def __str__(self):
         return self.name
@@ -106,7 +106,7 @@ class Childs(BaseModel):
     @property
     def age(self):
         today = date.today()
-        return today.year - date_born.year - ((today.month, today.day) < (date_born.month, date_born.day))
+        return today.year - self.date_born.year - ((today.month, today.day) < (self.date_born.month, self.date_born.day))
 
 
 class ParentsChilds(models.Model):
@@ -116,6 +116,7 @@ class ParentsChilds(models.Model):
     parent = models.ForeignKey(Parents, verbose_name='Adulto', on_delete=models.PROTECT)
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
+    deleted = models.BooleanField('Eliminado', default=False)
 
 
 class ChildsDetail(BaseModel):

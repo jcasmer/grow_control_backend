@@ -4,4 +4,4 @@ from .type_diagnostic import TypeDiagnosticSerializer, TypeDiagnosticFullDataSer
 from .advices import AdvicesSerializer, AdvicesFullDataSerializer
 from .relationship import RelationshipSerializer, RelationshipFullDataSerializer
 from .parents import ParentsSerializer, ParentsFullDataSerializer
-from .childs import ChildsSerializer, ChildsFullDataSerializer
+from .childs import ChildsSerializer, ChildsFullDataSerializer, ChildsSaveSerializer

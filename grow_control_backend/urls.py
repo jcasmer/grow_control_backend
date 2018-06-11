@@ -33,10 +33,13 @@ router.register(r'relationship', application_views.relationship.RelationshipView
 router.register(r'relationship-full-data', application_views.relationship.RelationshipFullDataViewSet, base_name='relationship-full-data')
 router.register(r'parents', application_views.parents.ParentsViewSet)
 router.register(r'parents-full-data', application_views.parents.ParentsFullDataViewSet, base_name='parents-full-data')
+router.register(r'childs', application_views.childs.ChildsViewSet)
+router.register(r'childs-full-data', application_views.parents.ParentsFullDataViewSet, base_name='childs-full-data')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', include('login.urls')) ,
     path('api/', include(router.urls)),
     path('api/validate-parent/', application_views.validate_parents.ValidateParentsView),
+    path('api/register-child/', application_views.register_child.RegistrationChildView),
 ]
