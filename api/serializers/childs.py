@@ -7,9 +7,11 @@ from ..models import Childs
 
 class ChildsSerializer(serializers.ModelSerializer):
 
+    age = serializers.ReadOnlyField()
+
     class Meta:
         model = Childs
-        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born')   
+        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'age')   
 
 
 class ChildsSaveSerializer(serializers.ModelSerializer):

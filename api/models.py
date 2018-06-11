@@ -106,7 +106,7 @@ class Childs(BaseModel):
     @property
     def age(self):
         today = date.today()
-        return today.year - date_born.year - ((today.month, today.day) < (date_born.month, date_born.day))
+        return today.year - self.date_born.year - ((today.month, today.day) < (self.date_born.month, self.date_born.day))
 
 
 class ParentsChilds(models.Model):
