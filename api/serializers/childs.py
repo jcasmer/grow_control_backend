@@ -9,8 +9,7 @@ class ChildsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Childs
-        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'created_by',
-                'created_at', 'updated_by', 'updated_at')   
+        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born')   
 
 
 class ChildsSaveSerializer(serializers.ModelSerializer):
@@ -19,11 +18,13 @@ class ChildsSaveSerializer(serializers.ModelSerializer):
         model = Childs
         fields = ('id', 'document', 'name', 'gender', 'date_born')   
 
+
 class ChildsFullDataSerializer(serializers.ModelSerializer):
     
     created_by = serializers.StringRelatedField()
     updated_by = serializers.StringRelatedField()
     gender = serializers.CharField(source='get_gender_display')
+    date_born = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
     created_at = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
     updated_at = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
 
