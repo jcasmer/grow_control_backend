@@ -116,7 +116,6 @@ class ParentsChilds(BaseModel):
     parent = models.ForeignKey(Parents, verbose_name='Adulto', on_delete=models.PROTECT)
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
-    deleted = models.BooleanField('Eliminado', default=False)
 
 
 class ChildsDetail(BaseModel):
