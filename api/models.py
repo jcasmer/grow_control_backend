@@ -109,14 +109,13 @@ class Childs(BaseModel):
         return today.year - self.date_born.year - ((today.month, today.day) < (self.date_born.month, self.date_born.day))
 
 
-class ParentsChilds(models.Model):
+class ParentsChilds(BaseModel):
     '''
     Model's relation parents to child
     '''
     parent = models.ForeignKey(Parents, verbose_name='Adulto', on_delete=models.PROTECT)
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
-    deleted = models.BooleanField('Eliminado', default=False)
 
 
 class ChildsDetail(BaseModel):

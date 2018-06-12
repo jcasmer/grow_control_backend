@@ -5,3 +5,4 @@ from .advices import AdvicesSerializer, AdvicesFullDataSerializer
 from .relationship import RelationshipSerializer, RelationshipFullDataSerializer
 from .parents import ParentsSerializer, ParentsFullDataSerializer
 from .childs import ChildsSerializer, ChildsFullDataSerializer, ChildsSaveSerializer
+from .parents_childs import ParentsChildsSerializer, ParentsChildsFullDataSerializer

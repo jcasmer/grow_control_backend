@@ -4,3 +4,4 @@ from .advices import AdvicesFilter, AdvicesFullDataFilter
 from .relationship import RelationshipFilter, RelationshipFullDataFilter
 from .parents import ParentsFilter, ParentsFullDataFilter
 from .childs import ChildsFilter, ChildsFullDataFilter
+from .parents_child import ParentsChildsFilter, ParentsChildsFullDataFilter
