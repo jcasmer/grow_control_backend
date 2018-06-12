@@ -7,3 +7,4 @@ from .parents import ParentsViewSet, ParentsFullDataViewSet
 from .validate_parents import ValidateParentsView
 from .register_child import RegistrationChildView
 from .childs import ChildsViewSet, ChildsFullDataViewSet
+from .parents_childs import ParentsChildsViewSet, ParentsChildsFullDataViewSet

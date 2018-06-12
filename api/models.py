@@ -109,7 +109,7 @@ class Childs(BaseModel):
         return today.year - self.date_born.year - ((today.month, today.day) < (self.date_born.month, self.date_born.day))
 
 
-class ParentsChilds(models.Model):
+class ParentsChilds(BaseModel):
     '''
     Model's relation parents to child
     '''

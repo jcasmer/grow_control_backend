@@ -35,6 +35,8 @@ router.register(r'parents', application_views.parents.ParentsViewSet)
 router.register(r'parents-full-data', application_views.parents.ParentsFullDataViewSet, base_name='parents-full-data')
 router.register(r'childs', application_views.childs.ChildsViewSet)
 router.register(r'childs-full-data', application_views.parents.ParentsFullDataViewSet, base_name='childs-full-data')
+router.register(r'parents-childs', application_views.parents_childs.ParentsChildsViewSet)
+router.register(r'parents-childs-full-data', application_views.parents_childs.ParentsChildsFullDataViewSet, base_name='parents-childs-full-data')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
