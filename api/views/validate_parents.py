@@ -45,6 +45,7 @@ def ValidateParentsView(request):
         pass
     data = {}
     try:
+        data['id'] = parents.id
         data['document'] = parents.document
         data['name'] = parents.name
         data['relationship'] = relationship.name
