@@ -15,6 +15,7 @@ class ParentsChildsSerializer(serializers.ModelSerializer):
 
 class ParentsChildsFullDataSerializer(serializers.ModelSerializer):
     
+    parent_document = serializers.ReadOnlyField()
     parent = serializers.StringRelatedField()
     child = serializers.StringRelatedField()
     relationship = serializers.StringRelatedField()
@@ -25,7 +26,7 @@ class ParentsChildsFullDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ParentsChilds
-        fields = ('url', 'id', 'parent', 'child', 'relationship', 'created_at', 'created_by', 'updated_at', 'updated_by')
+        fields = ('url', 'id', 'parent', 'child', 'relationship', 'parent_document', 'created_at', 'created_by', 'updated_at', 'updated_by')
         extra_kwargs = {
             'id': {'read_only': True},
             'created_at': {'read_only': True},

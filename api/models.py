@@ -117,6 +117,10 @@ class ParentsChilds(BaseModel):
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
     relationship = models.ForeignKey(Relationship, verbose_name='Parentesco', on_delete=models.PROTECT)
 
+    @property
+    def parent_document(self):
+        return self.parent.document
+
 
 class ChildsDetail(BaseModel):
     '''
