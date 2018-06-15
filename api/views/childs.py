@@ -8,7 +8,7 @@ from django_filters.rest_framework import  DjangoFilterBackend
 
 from src.base_view import BaseViewSet
 
-from ..models import Childs
+from ..models import Childs, ChildsDetail
 from ..serializers import ChildsSerializer, ChildsFullDataSerializer
 from ..filters import ChildsFilter, ChildsFullDataFilter
 
@@ -33,11 +33,14 @@ class ChildsViewSet(BaseViewSet):
     def perform_destroy(self, serializer): 
 
         errors = {}
-        parents = ParentsChilds.objects.filter(parent=self.kwargs['pk'])
-        if parents:
-            errors['error'] = 'Esta persona ya tiene un menor asociado por lo tanto no puede eliminarse.'
-        if errors:
-            raise ValidationError(errors)
+        try:
+            child_details = ChildsDetail.objects.filter(child=self.kwargs['pk'])
+            if child_details:
+                for child in child_details:
+                    child.delete()
+        except:
+            pass
+      
         serializer.delete()
 
 
