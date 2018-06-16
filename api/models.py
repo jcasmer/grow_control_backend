@@ -99,6 +99,10 @@ class Childs(BaseModel):
     name = models.CharField('Nombre', max_length=150)
     gender = models.CharField('Genero', max_length=50, choices=GENDER_TYPE)
     date_born = models.DateField('Fecha de nacimiento')
+    height_born = models.FloatField('Altura al nacer')
+    weight_born = models.FloatField('Peso al nacer')
+    child_live = models.CharField('Con quién vive el menor', max_length=150)
+    age_breastfeeding = models.CharField('Edad en que se abandona la lactancia materna', max_length=20, validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     def __str__(self):
         return self.name
