@@ -102,7 +102,7 @@ class Childs(BaseModel):
     height_born = models.FloatField('Altura al nacer')
     weight_born = models.FloatField('Peso al nacer')
     child_live = models.CharField('Con quién vive el menor', max_length=150)
-    age_breastfeeding = models.CharField('Edad en que se abandona la lactancia materna', max_length=20, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    age_breastfeeding = models.IntegerField('Edad en que se abandona la lactancia materna', validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     def __str__(self):
         return self.name
@@ -134,4 +134,4 @@ class ChildsDetail(BaseModel):
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
     height = models.FloatField('Altura')
     weight = models.FloatField('Peso')
-    type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
+    # type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
