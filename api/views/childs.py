@@ -23,7 +23,7 @@ class ChildsViewSet(BaseViewSet):
         'gender': ['exact'],
         'date_born': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],      
     '''
-    permission_code = 'child'
+    permission_code = 'childs'
     
     queryset = Childs.objects.all().select_related('created_by','updated_by')
     serializer_class = ChildsSerializer
@@ -58,7 +58,7 @@ class ChildsFullDataViewSet(BaseViewSet):
         'updated_at': ['exact', 'year', 'year__gte', 'year__lte', 'month', 'month__lte', 'month__gte', 'day', 'day__lte', 'day__gte', 'year__in', 'month__in', 'day__in'],
         'updated_by__username': ['exact', 'icontains'],  
     '''
-    permission_code = 'child'
+    permission_code = 'childs'
     
     queryset = Childs.objects.all().select_related('created_by','updated_by').order_by('document', 'name')
     serializer_class = ChildsFullDataSerializer

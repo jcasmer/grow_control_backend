@@ -11,14 +11,14 @@ class ChildsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Childs
-        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'age')   
-
+        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'age', 'height_born', 'weight_born', 'child_live', 'age_breastfeeding')   
+        
 
 class ChildsSaveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Childs
-        fields = ('id', 'document', 'name', 'gender', 'date_born')   
+        fields = ('id', 'document', 'name', 'gender', 'date_born', 'height_born', 'weight_born', 'child_live', 'age_breastfeeding')
 
 
 class ChildsFullDataSerializer(serializers.ModelSerializer):
@@ -32,5 +32,6 @@ class ChildsFullDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Childs
-        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'age', 'created_by',
-                'created_at', 'updated_by', 'updated_at')
+        fields = ('url', 'id', 'document', 'name', 'gender', 'date_born', 'age',
+            'height_born', 'weight_born', 'child_live', 'age_breastfeeding',
+            'created_by', 'created_at', 'updated_by', 'updated_at')
