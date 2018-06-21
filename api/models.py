@@ -132,6 +132,6 @@ class ChildsDetail(BaseModel):
     '''
 
     child = models.ForeignKey(Childs, verbose_name='Niño(a)', on_delete=models.PROTECT)
-    height = models.FloatField('Altura')
-    weight = models.FloatField('Peso')
+    height = models.FloatField('Altura', validators=[MinValueValidator(0),])
+    weight = models.FloatField('Peso', validators=[MinValueValidator(0),])
     # type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
