@@ -82,12 +82,7 @@ WSGI_APPLICATION = 'grow_control_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'growcontrol',
-        'USER': 'grow',
-        'PASSWORD': 'grow1234',
-        'HOST': '192.168.1.76',
-        'PORT': '5432',
+        
     }
 }
 
