@@ -48,7 +48,6 @@ def RegistrationChildView(request):
         transaction.rollback()
         return Response({'error': str(e)}, status=400)
     except Exception as e:
-        print(e)
         transaction.rollback()
         return Response({'error': 'Se ha presentado error con el registro'}, status=400)
 
