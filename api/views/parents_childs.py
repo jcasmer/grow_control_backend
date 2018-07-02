@@ -31,6 +31,16 @@ class ParentsChildsViewSet(BaseViewSet):
     filter_class = ParentsChildsFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
 
+    
+    def perform_destroy(self, serializer): 
+        errors = {}
+        parents_childs = ParentsChilds.objects.filter(id=self.kwargs['pk'])
+        if parents_childs and len(parents_childs) == 1:        
+            errors['error'] = 'No se puede eliminar. Debe tener mínimo un responsable'
+        if errors:
+            raise ValidationError(errors)
+        serializer.delete()
+
 
 class ParentsChildsFullDataViewSet(BaseViewSet):
     '''
