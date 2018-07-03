@@ -28,8 +28,7 @@ class ChildsDetailViewSet(BaseViewSet):
     queryset = ChildsDetail.objects.all().select_related('created_by','updated_by')
     serializer_class = ChildsDetailSerializer
     filter_class = ChildsDetailFilter
-    filter_backends = (OrderingFilter, DjangoFilterBackend)
-    
+    filter_backends = (OrderingFilter, DjangoFilterBackend)   
 
 
 class ChildsDetailFullDataViewSet(BaseViewSet):
