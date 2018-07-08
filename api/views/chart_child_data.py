@@ -40,7 +40,7 @@ def ChartChildDataView(request):
     #     return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
 
     if not childs_detail:
-        return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
+        return Response({'error': 'No se han realizado controles para el menor'}, status=400)
     
     try:
         child = Childs.objects.get(id=request.GET.get('idChild'))
@@ -61,6 +61,7 @@ def ChartChildDataView(request):
         # type 1 == weight 
         if request.GET.get('chartType') == '1':
             data.append(detail.weight)
+        # type 2 == height 
         elif request.GET.get('chartType') == '2':
             data.append(detail.height)
 
