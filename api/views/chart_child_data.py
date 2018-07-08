@@ -1,7 +1,8 @@
 '''
 '''
+from datetime import datetime
+import math
 import locale
-from dateutil import relativedelta
 
 from django.conf import settings
 from django.db import transaction
@@ -45,7 +46,7 @@ def ChartChildDataView(request):
         child = Childs.objects.get(id=request.GET.get('idChild'))
     except:
         pass
-    locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
+    locale.setlocale(locale.LC_TIME, 'es_CO.utf8')
     # label.append('Nacimiento Mes: '+ ' ' + child.date_born.strftime('%B') + ' año: ' + child.date_born.strftime('%Y'))
     label.append('0')
     if request.GET.get('chartType') == '1':
@@ -54,9 +55,9 @@ def ChartChildDataView(request):
         data.append(child.height_born)
 
     for detail in childs_detail:
-        # label.append('Semana: '+ ' ' + detail.created_at.strftime('%B') + ' año: ' + detail.created_at.strftime('%Y'))
-        difference = relativedelta.relativedelta( detail.created_at, child.date_born)
-        label.append(difference.months +1 )
+     
+        date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
+        label.append(math.ceil(date_to_subs.days / 7 ))
         # type 1 == weight 
         if request.GET.get('chartType') == '1':
             data.append(detail.weight)

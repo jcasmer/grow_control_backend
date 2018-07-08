@@ -1,5 +1,6 @@
 '''
 '''
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -28,7 +29,20 @@ class ChildsDetailViewSet(BaseViewSet):
     queryset = ChildsDetail.objects.all().select_related('created_by','updated_by')
     serializer_class = ChildsDetailSerializer
     filter_class = ChildsDetailFilter
-    filter_backends = (OrderingFilter, DjangoFilterBackend)   
+    filter_backends = (OrderingFilter, DjangoFilterBackend)
+
+
+    def perform_create(self, serializer):  # pylint: disable=arguments-differ
+        '''
+        Overwrite create
+        '''        
+        try:
+            detail = ChildsDetail.objects.filter(created_at__lte=datetime.now(), deleted=0).last()
+        except:
+            detail = None
+        if detail:
+            raise ValidationError({'error': ['Solo se puede registrar un control por día.']})              
+        serializer.save()   
 
 
 class ChildsDetailFullDataViewSet(BaseViewSet):
@@ -47,7 +61,7 @@ class ChildsDetailFullDataViewSet(BaseViewSet):
     '''
     permission_code = 'childsdetail'
     
-    queryset = ChildsDetail.objects.all().select_related('created_by','updated_by')
+    queryset = ChildsDetail.objects.all().select_related('created_by','updated_by').order_by('-created_at')
     serializer_class = ChildsDetailFullDataSerializer
     filter_class = ChildsDetailFullDataFilter
     filter_backends = (OrderingFilter, DjangoFilterBackend)
