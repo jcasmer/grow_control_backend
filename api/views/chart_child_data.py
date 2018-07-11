@@ -1,5 +1,7 @@
 '''
 '''
+from datetime import datetime
+import math
 import locale
 
 from django.conf import settings
@@ -38,24 +40,28 @@ def ChartChildDataView(request):
     #     return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
 
     if not childs_detail:
-        return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
+        return Response({'error': 'No se han realizado controles para el menor'}, status=400)
     
     try:
         child = Childs.objects.get(id=request.GET.get('idChild'))
     except:
         pass
-    locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
-    label.append('Semana: '+ ' ' + child.date_born.strftime('%u') + ' año: ' + child.date_born.strftime('%Y'))
+    locale.setlocale(locale.LC_TIME, 'es_CO.utf8')
+    # label.append('Nacimiento Mes: '+ ' ' + child.date_born.strftime('%B') + ' año: ' + child.date_born.strftime('%Y'))
+    label.append('0')
     if request.GET.get('chartType') == '1':
         data.append(child.weight_born)
     elif request.GET.get('chartType') == '2':
         data.append(child.height_born)
 
     for detail in childs_detail:
-        label.append('Semana: '+ ' ' + detail.created_at.strftime('%U') + ' año: ' + detail.created_at.strftime('%Y'))
+     
+        date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
+        label.append(math.ceil(date_to_subs.days / 7 ))
         # type 1 == weight 
         if request.GET.get('chartType') == '1':
             data.append(detail.weight)
+        # type 2 == height 
         elif request.GET.get('chartType') == '2':
             data.append(detail.height)
 
