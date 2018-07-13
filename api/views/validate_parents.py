@@ -44,13 +44,11 @@ def ValidateParentsView(request):
     except:
         pass
     data = {}
-    try:
+    if parents and relationship:
         data['id'] = parents.id
         data['document'] = parents.document
         data['name'] = parents.name
         data['relationship'] = relationship.name
-    except Exception as e:
-        return Response({'errors': 'No se encontró la persona  con el documento indicado.'}, status=400)
     
     return Response(data, status=200)
 
