@@ -112,6 +112,9 @@ class Childs(BaseModel):
         today = date.today()
         return today.year - self.date_born.year - ((today.month, today.day) < (self.date_born.month, self.date_born.day))
 
+    class Meta:
+        permissions = (('retrieve_childs', 'Consultar menor'),
+                       ('list_childs', 'Consultar menores'))
 
 class ParentsChilds(BaseModel):
     '''
@@ -124,6 +127,10 @@ class ParentsChilds(BaseModel):
     @property
     def parent_document(self):
         return self.parent.document
+    
+    class Meta:
+        permissions = (('retrieve_parentschilds', 'Consultar responsable menor'),
+                       ('list_childsdetail', 'Consultar responsables del menor'))
 
 
 class ChildsDetail(BaseModel):
@@ -135,3 +142,8 @@ class ChildsDetail(BaseModel):
     height = models.FloatField('Altura', validators=[MinValueValidator(0),])
     weight = models.FloatField('Peso', validators=[MinValueValidator(0),])
     # type_diagnostic = models.ForeignKey(TypeDiagnostic, verbose_name='Tipo de Diagnostico', on_delete=models.PROTECT)
+
+    class Meta:
+        permissions = (('retrieve_childsdetail', 'Consultar control del menor'),
+                       ('list_childsdetail', 'Consultar controles del menor'))
+

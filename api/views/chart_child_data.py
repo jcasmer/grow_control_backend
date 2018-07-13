@@ -29,12 +29,13 @@ def ChartChildDataView(request):
     label = []
     data = []
     childs_detail = None
+
     if 'idChild' in request.GET:
         childs_detail = ChildsDetail.objects.filter(child=request.GET.get('idChild')).order_by('created_at')
         
     else:
         return Response({'error': 'No se encontró el registro'}, status=400)
-    # if 'document' in request.GET and not:
+    # if 'document' in request.GET:
     #     childs_detail = ChildsDetail.objects.filter(child__document=request.GET.get('document')).order_by('created_at')
     # else:
     #     return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
