@@ -159,3 +159,5 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
 
 }
+
+FILE_ROOT = os.path.join(BASE_DIR, 'data_chart')

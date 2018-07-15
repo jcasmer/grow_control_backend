@@ -66,6 +66,7 @@ def ChartChildDataView(request):
         elif request.GET.get('chartType') == '2':
             data.append(detail.height)
 
+    oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), len(childs_detail) )
     full_data = {
         'label': label,
         'data': data
