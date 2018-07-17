@@ -4,11 +4,9 @@ django-filter==1.1.0
 djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
 Markdown==2.6.11
-pkg-resources==0.0.0
 psycopg2==2.7.4
 psycopg2-binary==2.7.4
 PyJWT==1.6.1
 pytz==2018.4
-//python-dateutil==2.7.3
 pandas==0.23.3
 xlrd==1.1.0
