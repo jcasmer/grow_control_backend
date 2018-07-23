@@ -21,7 +21,7 @@ from lib.utilities import Utilites
 
 
 @api_view(['GET'])
-# @authentication_classes([JSONWebTokenAuthentication])
+@authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def ChartChildDataView(request):
     
@@ -35,10 +35,6 @@ def ChartChildDataView(request):
         
     else:
         return Response({'error': 'No se encontró el registro'}, status=400)
-    # if 'document' in request.GET:
-    #     childs_detail = ChildsDetail.objects.filter(child__document=request.GET.get('document')).order_by('created_at')
-    # else:
-    #     return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
 
     if not childs_detail:
         return Response({'error': 'No se han realizado controles para el menor'}, status=400)
@@ -48,7 +44,6 @@ def ChartChildDataView(request):
     except:
         pass
     locale.setlocale(locale.LC_TIME, 'es_CO.utf8')
-    # label.append('Nacimiento Mes: '+ ' ' + child.date_born.strftime('%B') + ' año: ' + child.date_born.strftime('%Y'))
     label.append('0')
     if request.GET.get('chartType') == '1':
         data.append(child.weight_born)
@@ -62,7 +57,7 @@ def ChartChildDataView(request):
         week = math.ceil(date_to_subs.days / 7 )
         label.append(week)
         # type 1 == weight 
-        if request.GET.get('chartType') == '1':
+        if request.GET.get('chartType') == '1' or request.GET.get('chartType') == '3':
             data.append(detail.weight)
         # type 2 == height 
         elif request.GET.get('chartType') == '2':

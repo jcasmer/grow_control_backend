@@ -10,3 +10,4 @@ from .childs import ChildsViewSet, ChildsFullDataViewSet
 from .parents_childs import ParentsChildsViewSet, ParentsChildsFullDataViewSet
 from .childs_detail import ChildsDetailViewSet, ChildsDetailFullDataViewSet
 from .chart_child_data import ChartChildDataView
+from .suggestions import SuggestionsView
