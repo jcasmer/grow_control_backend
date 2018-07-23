@@ -21,7 +21,7 @@ from lib.utilities import Utilites
 
 
 @api_view(['GET'])
-# @authentication_classes([JSONWebTokenAuthentication])
+@authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def ChartChildDataView(request):
     
@@ -35,10 +35,6 @@ def ChartChildDataView(request):
         
     else:
         return Response({'error': 'No se encontró el registro'}, status=400)
-    # if 'document' in request.GET:
-    #     childs_detail = ChildsDetail.objects.filter(child__document=request.GET.get('document')).order_by('created_at')
-    # else:
-    #     return Response({'error': 'No se encontró controles realizados para el menor'}, status=400)
 
     if not childs_detail:
         return Response({'error': 'No se han realizado controles para el menor'}, status=400)
@@ -48,29 +44,36 @@ def ChartChildDataView(request):
     except:
         pass
     locale.setlocale(locale.LC_TIME, 'es_CO.utf8')
-    # label.append('Nacimiento Mes: '+ ' ' + child.date_born.strftime('%B') + ' año: ' + child.date_born.strftime('%Y'))
     label.append('0')
     if request.GET.get('chartType') == '1':
         data.append(child.weight_born)
     elif request.GET.get('chartType') == '2':
         data.append(child.height_born)
-
+    
+    week = None
     for detail in childs_detail:
      
         date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
-        label.append(math.ceil(date_to_subs.days / 7 ))
+        week = math.ceil(date_to_subs.days / 7 )
+        label.append(week)
         # type 1 == weight 
-        if request.GET.get('chartType') == '1':
+        if request.GET.get('chartType') == '1' or request.GET.get('chartType') == '3':
             data.append(detail.weight)
         # type 2 == height 
         elif request.GET.get('chartType') == '2':
             data.append(detail.height)
-
+    
+    maxlenght = len(childs_detail) - 1
+    date_to_subs = childs_detail[maxlenght].created_at - datetime.combine(child.date_born, datetime.min.time())
+    date_to_subs = math.ceil(date_to_subs.days / 7 )
+    
+    child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail[maxlenght] if len(childs_detail) > 1 else childs_detail, date_to_subs )
     oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), len(childs_detail) )
     full_data = {
         'label': label,
         'data': data,
-        'oms': oms_data
+        'oms': oms_data,
+        'status': child_status
     }
     return Response(full_data, status=200)
 

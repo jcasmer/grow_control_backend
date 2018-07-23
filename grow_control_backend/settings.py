@@ -125,6 +125,7 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CORS_ORIGIN_ALLOW_ALL = True

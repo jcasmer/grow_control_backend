@@ -49,4 +49,5 @@ urlpatterns = [
     path('api/validate-parent/', application_views.validate_parents.ValidateParentsView),
     path('api/register-child/', application_views.register_child.RegistrationChildView),
     path('api/chart-child/', application_views.chart_child_data.ChartChildDataView),
+    path('api/suggestions/', application_views.suggestions.SuggestionsView),
 ]
