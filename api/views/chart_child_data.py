@@ -57,11 +57,15 @@ def ChartChildDataView(request):
         week = math.ceil(date_to_subs.days / 7 )
         label.append(week)
         # type 1 == weight 
-        if request.GET.get('chartType') == '1' or request.GET.get('chartType') == '3':
+        if request.GET.get('chartType') == '1':
             data.append(detail.weight)
         # type 2 == height 
         elif request.GET.get('chartType') == '2':
             data.append(detail.height)
+        # type 3 == IMC 
+        elif request.GET.get('chartType') == '3':
+            imc = detail.weight / detail.height * detail.height
+            data.append(imc)
     
     maxlenght = len(childs_detail) - 1
     date_to_subs = childs_detail[maxlenght].created_at - datetime.combine(child.date_born, datetime.min.time())
