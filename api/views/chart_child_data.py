@@ -7,6 +7,7 @@ import locale
 from django.conf import settings
 from django.db import transaction
 from django.contrib.auth.models import User
+from django.db.models import Max
 
 from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError
@@ -31,8 +32,7 @@ def ChartChildDataView(request):
     childs_detail = None
 
     if 'idChild' in request.GET:
-        childs_detail = ChildsDetail.objects.filter(child=request.GET.get('idChild')).order_by('created_at')
-        
+        childs_detail = ChildsDetail.objects.filter(child=request.GET.get('idChild')).annotate(created_at_max=Max('created_at')).order_by('created_at')       
     else:
         return Response({'error': 'No se encontró el registro'}, status=400)
 
@@ -52,11 +52,14 @@ def ChartChildDataView(request):
     
     week = None
     for detail in childs_detail:
-     
+        
         date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
-        week = math.ceil(date_to_subs.days / 7 )
-        label.append(week)
+        if request.GET.get('chartType') == '2':
+            week = math.ceil(date_to_subs.days / 30 )
+        else:
+            week = math.ceil(date_to_subs.days / 7 )
         # type 1 == weight 
+        label.append(week)
         if request.GET.get('chartType') == '1':
             data.append(detail.weight)
         # type 2 == height 

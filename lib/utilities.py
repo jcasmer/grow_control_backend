@@ -31,15 +31,15 @@ class Utilites():
             file_to_read = pandas.read_excel(open(file_path, 'rb'), sheet_name=sheet)
         except:
             pass
-        for i in range(0, len(file_to_read) ):            
+        j = 0
+        for i in range(0, data_lenght + 2):            
             label.append(file_to_read['Day'][i])
             data.append(file_to_read['SD0'][i])
-            
+
         full_data = {
             'label': label,
             'data': data
         }
-
         return full_data
         
 
