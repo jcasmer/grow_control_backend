@@ -103,21 +103,21 @@ class Utilites():
                     status = 'Sobre Peso'
             elif int(char_type) == 2:
                 if child_detail.height <= file_to_read['SD3neg'][line_week]:
-                    status = 'Bajo Peso Severo'
+                    status = 'Baja Talla Severa'
                 elif file_to_read['SD3neg'][line_week] <=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
-                    status = 'Bajo Peso'
+                    status = 'Baja Talla'
                 elif file_to_read['SD2neg'][line_week] <=  child_detail.height and file_to_read['SD1neg'][line_week] >= child_detail.height :
-                    status = 'Peso Promedio'
+                    status = 'Baja Talla'
                 elif file_to_read['SD1neg'][line_week] <=  child_detail.height and file_to_read['SD0'][line_week] >= child_detail.height :
-                    status = 'Peso Promedio'
+                    status = 'Talla Promedio'
                 elif file_to_read['SD0'][line_week] <= child_detail.height and file_to_read['SD1'][line_week] >= child_detail.height :
-                    status = 'Peso Promedio'
+                    status = 'Talla Promedio'
                 elif file_to_read['SD1'][line_week] <= child_detail.height and file_to_read['SD2'][line_week] >= child_detail.height :
-                    status = 'Posible Riesgo de Sobrepeso'
+                    status = 'Talla Por Encima Del Promedio'
                 elif file_to_read['SD2'][line_week] <= child_detail.height and file_to_read['SD3'][line_week] >= child_detail.height :
-                    status = 'Sobre Peso'
+                    status = 'Talla Por Encima Del Promedio '
                 elif file_to_read['SD3'][line_week] < child_detail.height :
-                    status = 'Sobre Peso'
+                    status = 'Super Talla'
         except Exception as e:
             pass
 
