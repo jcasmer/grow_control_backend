@@ -51,6 +51,8 @@ class LoginView(APIView):
             user_authenticated = authenticate(username=username, password=password)
             if user_authenticated and user.is_active:
                 login(request, user)
+            else:
+                return Response({'detail': ['Acceso denegado']}, status=status.HTTP_401_UNAUTHORIZED)
             jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
             jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
