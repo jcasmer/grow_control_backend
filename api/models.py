@@ -29,6 +29,10 @@ class TypeDiagnostic(BaseModel):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'diagnóstico'
+        verbose_name_plural = 'diagnósticos'
+
 
 class Relationship(BaseModel):
     '''
