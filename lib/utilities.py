@@ -120,5 +120,4 @@ class Utilites():
                     status = 'Super Talla'
         except Exception as e:
             pass
-
         return status
