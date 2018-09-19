@@ -32,9 +32,11 @@ class Utilites():
         except:
             pass
         j = 0
-        for i in range(0, data_lenght + 2):            
-            label.append(file_to_read['Day'][i])
-            data.append(file_to_read['SD0'][i])
+        for i in range(0, data_lenght + 3, 2):
+            print(file_to_read['Day'][i], data_lenght)
+            if file_to_read['Day'][i] <= data_lenght:
+                label.append(file_to_read['Day'][i])
+                data.append(file_to_read['SD0'][i])
 
         full_data = {
             'label': label,

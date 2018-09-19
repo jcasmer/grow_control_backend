@@ -76,7 +76,7 @@ def ChartChildDataView(request):
 
     childs_detail2 = ChildsDetail.objects.filter(child=request.GET.get('idChild')).last()
     child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail2, date_to_subs )
-    oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), len(childs_detail) )
+    oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), week )
     full_data = {
         'label': label,
         'data': data,
