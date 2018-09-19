@@ -106,7 +106,7 @@ class Childs(BaseModel):
     height_born = models.FloatField('Altura al nacer')
     weight_born = models.FloatField('Peso al nacer')
     child_live = models.CharField('Con quién vive el menor', max_length=150)
-    age_breastfeeding = models.IntegerField('Edad en que se abandona la lactancia materna', validators=[MinValueValidator(0), MaxValueValidator(5)])
+    age_breastfeeding = models.IntegerField('Edad en que se abandona la lactancia materna', validators=[MinValueValidator(0), MaxValueValidator(50)])
 
     def __str__(self):
         return self.name

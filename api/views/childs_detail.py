@@ -35,9 +35,9 @@ class ChildsDetailViewSet(BaseViewSet):
     def perform_create(self, serializer):  # pylint: disable=arguments-differ
         '''
         Overwrite create
-        '''        
+        '''   
         try:
-            detail = ChildsDetail.objects.filter(created_at__lte=datetime.now(), deleted=0).last()
+            detail = ChildsDetail.objects.filter(created_at__lte=datetime.now(), deleted=0, child_id=self.request.data['child']).last()
         except:
             detail = None
         if detail:

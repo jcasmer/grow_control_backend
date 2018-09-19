@@ -32,9 +32,10 @@ class Utilites():
         except:
             pass
         j = 0
-        for i in range(0, data_lenght + 2):            
-            label.append(file_to_read['Day'][i])
-            data.append(file_to_read['SD0'][i])
+        for i in range(0, data_lenght + 3, 2):
+            if file_to_read['Day'][i] <= data_lenght:
+                label.append(file_to_read['Day'][i])
+                data.append(file_to_read['SD0'][i])
 
         full_data = {
             'label': label,
@@ -107,7 +108,7 @@ class Utilites():
                 elif file_to_read['SD3neg'][line_week] <=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
                     status = 'Baja Talla'
                 elif file_to_read['SD2neg'][line_week] <=  child_detail.height and file_to_read['SD1neg'][line_week] >= child_detail.height :
-                    status = 'Baja Talla'
+                    status = 'Talla Promedio'
                 elif file_to_read['SD1neg'][line_week] <=  child_detail.height and file_to_read['SD0'][line_week] >= child_detail.height :
                     status = 'Talla Promedio'
                 elif file_to_read['SD0'][line_week] <= child_detail.height and file_to_read['SD1'][line_week] >= child_detail.height :
@@ -120,5 +121,4 @@ class Utilites():
                     status = 'Super Talla'
         except Exception as e:
             pass
-
         return status
