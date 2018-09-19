@@ -67,6 +67,8 @@ def ChartChildDataView(request):
             data.append(detail.height)
         # type 3 == IMC 
         elif request.GET.get('chartType') == '3':
+            imc = child.weight_born / child.height_born * child.height_born
+            data.append(imc)
             imc = detail.weight / detail.height * detail.height
             data.append(imc)
     maxlenght = len(childs_detail) - 1

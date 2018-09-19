@@ -33,7 +33,6 @@ class Utilites():
             pass
         j = 0
         for i in range(0, data_lenght + 3, 2):
-            print(file_to_read['Day'][i], data_lenght)
             if file_to_read['Day'][i] <= data_lenght:
                 label.append(file_to_read['Day'][i])
                 data.append(file_to_read['SD0'][i])
@@ -109,7 +108,7 @@ class Utilites():
                 elif file_to_read['SD3neg'][line_week] <=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
                     status = 'Baja Talla'
                 elif file_to_read['SD2neg'][line_week] <=  child_detail.height and file_to_read['SD1neg'][line_week] >= child_detail.height :
-                    status = 'Baja Talla'
+                    status = 'Talla Promedio'
                 elif file_to_read['SD1neg'][line_week] <=  child_detail.height and file_to_read['SD0'][line_week] >= child_detail.height :
                     status = 'Talla Promedio'
                 elif file_to_read['SD0'][line_week] <= child_detail.height and file_to_read['SD1'][line_week] >= child_detail.height :
