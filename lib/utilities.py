@@ -32,13 +32,15 @@ class Utilites():
         except:
             pass
         j = 0
-        for i in range(0, data_lenght + 3, 2):
+        for i in range(0, data_lenght + 2, 2):
             if file_to_read['Day'][i] <= data_lenght:
-                label.append(file_to_read['Day'][i])
-                data.append(file_to_read['SD0'][i])
+                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
+            elif file_to_read['Day'][i] > data_lenght:
+                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
+                break
 
         full_data = {
-            'label': label,
+            # 'label': label,
             'data': data
         }
         return full_data
