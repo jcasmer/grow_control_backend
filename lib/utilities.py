@@ -1,5 +1,5 @@
 import pandas
-
+import math
 from django.conf import settings
 
 from api.models import TypeDiagnostic
@@ -18,11 +18,18 @@ class Utilites():
 
         sheet = 0
         # 1 == weight
-        if int(char_type) == 1 or int(char_type) == 3:
+        if int(char_type) == 1 :
             sheet = 0
+            sub = 7
+            file_to_read_imc = []
+        elif int(char_type) == 3:
+            sheet = 0
+            sub = 7
+            file_to_read_imc = pandas.read_excel(open(file_path, 'rb'), sheet_name=1)
         # 1 == height
         elif int(char_type) == 2:
             sheet = 1
+            file_to_read_imc = []
 
         full_data = {}
         label = []
@@ -33,10 +40,24 @@ class Utilites():
             pass
         j = 0
         for i in range(0, data_lenght + 2, 2):
-            if file_to_read['Day'][i] <= data_lenght:
-                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
-            elif file_to_read['Day'][i] > data_lenght:
-                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
+            if len(file_to_read_imc) > 0 and i > len(file_to_read_imc):
+                max_imc = file_to_read_imc['SD0'][len(file_to_read_imc)]
+            if int(char_type) == 1 or int(char_type) ==3:                
+                value = math.ceil( file_to_read['Day'][i] / sub )
+            else:
+                value = file_to_read['Day'][i]
+            if value <= data_lenght:
+                if len(file_to_read_imc) > 0 :
+                    imc = file_to_read['SD0'][i] / file_to_read_imc['SD0'][i] * file_to_read_imc['SD0'][i]
+                    data.append({'y': imc , 'x': value })
+                else:
+                    data.append({'y': file_to_read['SD0'][i], 'x': value })
+            elif value > data_lenght:
+                if len(file_to_read_imc) > 0:
+                    imc = file_to_read['SD0'][i] / file_to_read_imc['SD0'][i] * file_to_read_imc['SD0'][i]
+                    data.append({'y': imc , 'x': value })
+                else:
+                    data.append({'y': file_to_read['SD0'][i], 'x':value })
                 break
 
         full_data = {
@@ -60,9 +81,11 @@ class Utilites():
         # 1 == weight; 3 == IMC
         if int(char_type) == 1 or int(char_type) == 3:
             sheet = 0
+            sub = 7
         # 1 == height
         elif int(char_type) == 2:
             sheet = 1   
+            sub = 30
 
         try:
             file_to_read = pandas.read_excel(open(file_path, 'rb'), sheet_name=sheet)
@@ -82,6 +105,7 @@ class Utilites():
                 elif file_to_read['Day'][i] <= week and file_to_read['Day'][i] < week:
                     line_week = i
         status = ''
+        line_week = line_week -1
         try:
             if int(char_type) == 1 or int(char_type) == 3:
                 if child_detail.weight <= file_to_read['SD4neg'][line_week]:
@@ -107,7 +131,7 @@ class Utilites():
             elif int(char_type) == 2:
                 if child_detail.height <= file_to_read['SD3neg'][line_week]:
                     status = 'Baja Talla Severa'
-                elif file_to_read['SD3neg'][line_week] <=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
+                elif file_to_read['SD3neg'][line_week] >=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
                     status = 'Baja Talla'
                 elif file_to_read['SD2neg'][line_week] <=  child_detail.height and file_to_read['SD1neg'][line_week] >= child_detail.height :
                     status = 'Talla Promedio'
