@@ -77,10 +77,10 @@ def ChartChildDataView(request):
         date_to_subs = math.ceil(date_to_subs.days / 30 )
     else:
         date_to_subs = math.ceil(date_to_subs.days / 7 )
-        
+
     childs_detail2 = ChildsDetail.objects.filter(child=request.GET.get('idChild')).last()
     child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail2, date_to_subs )
-    oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), week )
+    oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), date_to_subs )
     x_data = []
 
     for i in range(0, len(data)):

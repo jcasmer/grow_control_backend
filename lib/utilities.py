@@ -20,6 +20,7 @@ class Utilites():
         # 1 == weight
         if int(char_type) == 1 or int(char_type) == 3:
             sheet = 0
+            sub = 7
         # 1 == height
         elif int(char_type) == 2:
             sheet = 1
@@ -33,10 +34,14 @@ class Utilites():
             pass
         j = 0
         for i in range(0, data_lenght + 2, 2):
-            if file_to_read['Day'][i] <= data_lenght:
-                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
-            elif file_to_read['Day'][i] > data_lenght:
-                data.append({'y': file_to_read['SD0'][i], 'x':file_to_read['Day'][i] })
+            if int(char_type) == 1 or int(char_type) ==3:
+                value = math.ceil( file_to_read['Day'][i] / sub )
+            else:
+                value = file_to_read['Day'][i]
+            if value <= data_lenght:
+                data.append({'y': file_to_read['SD0'][i], 'x': value })
+            elif value > data_lenght:
+                data.append({'y': file_to_read['SD0'][i], 'x':value })
                 break
 
         full_data = {
