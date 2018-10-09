@@ -73,16 +73,21 @@ def ChartChildDataView(request):
             data.append(imc)
     maxlenght = len(childs_detail) - 1
     date_to_subs = childs_detail[maxlenght].created_at - datetime.combine(child.date_born, datetime.min.time())
-    date_to_subs = math.ceil(date_to_subs.days / 7 )
-    
-
+    if request.GET.get('chartType') == '2':
+        date_to_subs = math.ceil(date_to_subs.days / 30 )
+    else:
+        date_to_subs = math.ceil(date_to_subs.days / 7 )
+        
     childs_detail2 = ChildsDetail.objects.filter(child=request.GET.get('idChild')).last()
     child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail2, date_to_subs )
     oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), week )
     x_data = []
 
     for i in range(0, len(data)):
-        x_data.append({'y': data[i], 'x':label[i]})
+        try:
+            x_data.append({'y': data[i], 'x':label[i]})
+        except:
+            continue
 
     full_data = {
         'label': label,

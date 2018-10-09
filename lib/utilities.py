@@ -1,5 +1,5 @@
 import pandas
-
+import math
 from django.conf import settings
 
 from api.models import TypeDiagnostic
@@ -60,9 +60,11 @@ class Utilites():
         # 1 == weight; 3 == IMC
         if int(char_type) == 1 or int(char_type) == 3:
             sheet = 0
+            sub = 7
         # 1 == height
         elif int(char_type) == 2:
             sheet = 1   
+            sub = 30
 
         try:
             file_to_read = pandas.read_excel(open(file_path, 'rb'), sheet_name=sheet)
@@ -82,6 +84,7 @@ class Utilites():
                 elif file_to_read['Day'][i] <= week and file_to_read['Day'][i] < week:
                     line_week = i
         status = ''
+        line_week = line_week -1
         try:
             if int(char_type) == 1 or int(char_type) == 3:
                 if child_detail.weight <= file_to_read['SD4neg'][line_week]:
@@ -107,7 +110,7 @@ class Utilites():
             elif int(char_type) == 2:
                 if child_detail.height <= file_to_read['SD3neg'][line_week]:
                     status = 'Baja Talla Severa'
-                elif file_to_read['SD3neg'][line_week] <=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
+                elif file_to_read['SD3neg'][line_week] >=  child_detail.height and file_to_read['SD2neg'][line_week] >= child_detail.height :
                     status = 'Baja Talla'
                 elif file_to_read['SD2neg'][line_week] <=  child_detail.height and file_to_read['SD1neg'][line_week] >= child_detail.height :
                     status = 'Talla Promedio'
