@@ -54,7 +54,7 @@ def ChartChildDataView(request):
     for detail in childs_detail:
         
         date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
-        if request.GET.get('chartType') == '2':
+        if request.GET.get('chartType') == '2' or request.GET.get('chartType') == '3':
             week = math.ceil(date_to_subs.days / 30 )
         else:
             week = math.ceil(date_to_subs.days / 7 )
@@ -73,7 +73,7 @@ def ChartChildDataView(request):
             data.append(imc)
     maxlenght = len(childs_detail) - 1
     date_to_subs = childs_detail[maxlenght].created_at - datetime.combine(child.date_born, datetime.min.time())
-    if request.GET.get('chartType') == '2':
+    if request.GET.get('chartType') == '2' or request.GET.get('chartType') == '3':
         date_to_subs = math.ceil(date_to_subs.days / 30 )
     else:
         date_to_subs = math.ceil(date_to_subs.days / 7 )
