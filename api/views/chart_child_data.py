@@ -51,9 +51,20 @@ def ChartChildDataView(request):
         data.append(child.height_born)
     
     week = None
+    if request.GET.get('chartType') == '3':
+        # added the first imc when the child's born
+        imc = child.weight_born / ((child.height_born / 100) **2)
+        data.append(imc)
+    elif request.GET.get('chartType') == '1':
+        data.append(child.weight_born)
+    # type 2 == height 
+    elif request.GET.get('chartType') == '2':
+        data.append(child.height_born)
+
     for detail in childs_detail:
         
         date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())
+        
         if request.GET.get('chartType') == '2' or request.GET.get('chartType') == '3':
             week = math.ceil(date_to_subs.days / 30 )
         else:
@@ -67,19 +78,20 @@ def ChartChildDataView(request):
             data.append(detail.height)
         # type 3 == IMC 
         elif request.GET.get('chartType') == '3':
-            imc = child.weight_born / child.height_born * child.height_born
-            data.append(imc)
-            imc = detail.weight / detail.height * detail.height
+            # imc = child.weight_born / (child.height_born * child.height_born)
+            # data.append(imc)
+            imc = detail.weight / ((detail.height /100) ** 2)
             data.append(imc)
     maxlenght = len(childs_detail) - 1
     date_to_subs = childs_detail[maxlenght].created_at - datetime.combine(child.date_born, datetime.min.time())
+    status_days = date_to_subs.days
     if request.GET.get('chartType') == '2' or request.GET.get('chartType') == '3':
         date_to_subs = math.ceil(date_to_subs.days / 30 )
     else:
         date_to_subs = math.ceil(date_to_subs.days / 7 )
 
     childs_detail2 = ChildsDetail.objects.filter(child=request.GET.get('idChild')).last()
-    child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail2, date_to_subs )
+    child_status = Utilites.get_child_status(child.gender, request.GET.get('chartType'), childs_detail2, status_days )
     oms_data = Utilites.get_oms_data(child.gender, request.GET.get('chartType'), date_to_subs )
     x_data = []
 
