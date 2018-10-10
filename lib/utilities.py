@@ -48,13 +48,13 @@ class Utilites():
                 value = file_to_read['Day'][i]
             if value <= data_lenght:
                 if len(file_to_read_imc) > 0 :
-                    imc = file_to_read['SD0'][i] / file_to_read_imc['SD0'][i] * file_to_read_imc['SD0'][i]
+                    imc = file_to_read['SD0'][i] / ((file_to_read_imc['SD0'][i] / 100) **2) 
                     data.append({'y': imc , 'x': value })
                 else:
                     data.append({'y': file_to_read['SD0'][i], 'x': value })
             elif value > data_lenght:
                 if len(file_to_read_imc) > 0:
-                    imc = file_to_read['SD0'][i] / file_to_read_imc['SD0'][i] * file_to_read_imc['SD0'][i]
+                    imc =  file_to_read['SD0'][i] / ((file_to_read_imc['SD0'][i] / 100) ** 2 ) 
                     data.append({'y': imc , 'x': value })
                 else:
                     data.append({'y': file_to_read['SD0'][i], 'x':value })
@@ -93,19 +93,14 @@ class Utilites():
             pass
         
         line_week = None
-        for i in range(0, len(file_to_read['Day']) - 1):
-            if file_to_read['Day'][i + 1]:
-                if file_to_read['Day'][i] <= week and file_to_read['Day'][i + 1] > week:
-                    line_week = i + 1
-                elif file_to_read['Day'][i] <= week and file_to_read['Day'][i + 1] < week:
-                    line_week = i + 1
-            else:
-                if file_to_read['Day'][i] <= week and file_to_read['Day'][i] > week:
-                    line_week = i
-                elif file_to_read['Day'][i] <= week and file_to_read['Day'][i] < week:
-                    line_week = i
         status = ''
-        line_week = line_week -1
+        for i in range(0, len(file_to_read['Day']) - 1):
+            try:
+                if week <= file_to_read['Day'][i]:
+                    line_week = i
+                    break              
+            except:
+                continue
         try:
             if int(char_type) == 1 or int(char_type) == 3:
                 if child_detail.weight <= file_to_read['SD4neg'][line_week]:
@@ -127,7 +122,8 @@ class Utilites():
                 elif file_to_read['SD3'][line_week] <= child_detail.weight and file_to_read['SD4'][line_week] >= child_detail.weight :
                     status = 'Sobre Peso'
                 elif file_to_read['SD4'][line_week] < child_detail.weight :
-                    status = 'Sobre Peso'
+                    print(line_week, child_detail.weight)
+                    status = 'Obeso'
             elif int(char_type) == 2:
                 if child_detail.height <= file_to_read['SD3neg'][line_week]:
                     status = 'Baja Talla Severa'
