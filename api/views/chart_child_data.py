@@ -52,8 +52,15 @@ def ChartChildDataView(request):
     
     week = None
     if request.GET.get('chartType') == '3':
+        # added the first imc when the child's born
         imc = child.weight_born / ((child.height_born / 100) **2)
         data.append(imc)
+    elif request.GET.get('chartType') == '1':
+        data.append(child.weight_born)
+    # type 2 == height 
+    elif request.GET.get('chartType') == '2':
+        data.append(child.height_born)
+
     for detail in childs_detail:
         
         date_to_subs = detail.created_at - datetime.combine(child.date_born, datetime.min.time())

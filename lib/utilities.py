@@ -81,11 +81,10 @@ class Utilites():
         # 1 == weight; 3 == IMC
         if int(char_type) == 1 or int(char_type) == 3:
             sheet = 0
-            sub = 7
         # 1 == height
         elif int(char_type) == 2:
             sheet = 1   
-            sub = 30
+            week = math.ceil(week / 30)
 
         try:
             file_to_read = pandas.read_excel(open(file_path, 'rb'), sheet_name=sheet)
