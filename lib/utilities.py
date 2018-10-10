@@ -121,7 +121,6 @@ class Utilites():
                 elif file_to_read['SD3'][line_week] <= child_detail.weight and file_to_read['SD4'][line_week] >= child_detail.weight :
                     status = 'Sobre Peso'
                 elif file_to_read['SD4'][line_week] < child_detail.weight :
-                    print(line_week, child_detail.weight)
                     status = 'Obeso'
             elif int(char_type) == 2:
                 if child_detail.height <= file_to_read['SD3neg'][line_week]:
