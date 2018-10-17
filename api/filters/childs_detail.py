@@ -25,6 +25,7 @@ class ChildsDetailFullDataFilter(django_filters.rest_framework.FilterSet):
         model = ChildsDetail
         fields = {
             'id': ['exact'],
+            'child': ['exact'],
             'child__document': ['exact', 'icontains'],
             'child__name': ['exact', 'icontains'],
             'height': ['exact', 'icontains'],

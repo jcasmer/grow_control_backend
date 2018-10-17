@@ -163,3 +163,7 @@ JWT_AUTH = {
 }
 
 FILE_ROOT = os.path.join(BASE_DIR, 'data_chart')
+
+
+FILE_GIRL_ROOT = os.path.join(BASE_DIR, 'data_chart/Ninas.xlsx')
+FILE_BOY_ROOT = os.path.join(BASE_DIR, 'data_chart/Ninos.xlsx')
