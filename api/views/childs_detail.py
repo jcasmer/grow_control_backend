@@ -40,8 +40,8 @@ class ChildsDetailViewSet(BaseViewSet):
             detail = ChildsDetail.objects.filter(created_at__lte=datetime.now(), deleted=0, child_id=self.request.data['child']).last()
         except:
             detail = None
-        if detail:
-            raise ValidationError({'error': ['Solo se puede registrar un control por día.']})              
+        # if detail:
+        #     raise ValidationError({'error': ['Solo se puede registrar un control por día.']})              
         serializer.save()   
 
 
@@ -50,6 +50,7 @@ class ChildsDetailFullDataViewSet(BaseViewSet):
     Parent's full data view
     FILTROS:
         'id': ['exact'],
+        'child': ['exact'],
         'child__document': ['exact', 'icontains'],
         'child__name': ['exact', 'icontains'],
         'height': ['exact', 'icontains'],
