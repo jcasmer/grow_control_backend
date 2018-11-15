@@ -114,6 +114,12 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             instance.is_staff = False
             instance.is_superuser= False
+        try:    
+            if validated_data['confirm_password']:
+                instance.set_password(validated_data['confirm_password'])
+        except:
+            pass
+        
         
         instance.save()
         return instance
